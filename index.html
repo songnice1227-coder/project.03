@@ -297,6 +297,106 @@ nav{position:sticky;top:0;z-index:200;height:58px;background:rgba(254,252,249,.9
 .tab-count{background:var(--primary);color:#fff;font-size:11px;font-weight:800;
   padding:2px 7px;border-radius:99px;min-width:18px;text-align:center}
 .mypage-body{padding:24px 40px 60px;background:linear-gradient(180deg,#D8EACF 0%,#E4F0DC 100%);min-height:60vh}
+/* ── 메모장 ── */
+.memo-pad{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--rmd);padding:20px;margin-bottom:28px;}
+.memo-pad-title{font-size:15px;font-weight:700;color:var(--text);margin-bottom:12px;display:flex;align-items:center;gap:6px;}
+.memo-pad textarea{width:100%;border:1.5px solid var(--border);border-radius:var(--r);padding:12px 14px;font-size:14px;color:var(--text);background:var(--bg);outline:none;line-height:1.7;transition:border-color var(--t);}
+.memo-pad textarea:focus{border-color:var(--primary);}
+.memo-pad-hint{font-size:12px;color:var(--text3);margin-top:6px;}
+/* ── 프로필 카드 ── */
+.profile-card{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--rmd);padding:20px;margin-bottom:20px;}
+.profile-card-header{display:flex;align-items:center;justify-content:space-between;cursor:pointer;margin-bottom:0;}
+.profile-card-header.open{margin-bottom:18px;}
+.profile-card-title{font-size:15px;font-weight:700;color:var(--text);display:flex;align-items:center;gap:7px;}
+.profile-card-toggle{font-size:13px;color:var(--text3);font-weight:600;}
+.profile-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.profile-field label{display:block;font-size:12px;font-weight:700;color:var(--text2);margin-bottom:4px;letter-spacing:.02em;}
+.profile-field select{width:100%;border:1.5px solid var(--border);border-radius:var(--r);padding:8px 10px;font-size:14px;color:var(--text);background:var(--bg);outline:none;transition:border-color var(--t);}
+.profile-field select:focus{border-color:var(--primary);}
+.profile-complete{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--primary);font-weight:600;margin-top:12px;}
+/* ── 비교 랭킹 뷰 ── */
+.rank-section{background:linear-gradient(135deg,#1F5E3C,#2E7D52);border-radius:var(--rmd);padding:20px;margin-bottom:20px;}
+.rank-title{font-size:16px;font-weight:800;color:#fff;margin-bottom:14px;display:flex;align-items:center;gap:7px;}
+.rank-row{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:var(--r);background:rgba(255,255,255,.1);margin-bottom:8px;cursor:pointer;transition:background .15s;}
+.rank-row:hover{background:rgba(255,255,255,.18);}
+.rank-row:last-child{margin-bottom:0;}
+.rank-num{width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,.2);color:#fff;font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.rank-num.top{background:#FFE76B;color:#1A1A2E;}
+.rank-info{flex:1;min-width:0;}
+.rank-name{font-size:14px;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.rank-company{font-size:12px;color:rgba(255,255,255,.65);margin-top:1px;}
+.rank-bar-wrap{width:100px;flex-shrink:0;}
+.rank-bar-bg{height:6px;background:rgba(255,255,255,.2);border-radius:3px;overflow:hidden;}
+.rank-bar-fill{height:100%;border-radius:3px;background:#FFE76B;transition:width .6s ease;}
+.rank-pct{font-size:13px;font-weight:800;color:#FFE76B;text-align:right;margin-top:3px;}
+/* ── 매칭 바 (카드 내) ── */
+.match-bar-wrap{margin-top:10px;padding-top:10px;border-top:1px solid var(--border);}
+.match-bar-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:5px;}
+.match-label{font-size:12px;font-weight:700;color:var(--text2);}
+.match-pct{font-size:13px;font-weight:800;}
+.match-pct.high{color:#2E7D52;}.match-pct.mid{color:#E8960A;}.match-pct.low{color:var(--accent);}
+.match-bg{height:7px;background:var(--border);border-radius:4px;overflow:hidden;}
+.match-fill{height:100%;border-radius:4px;transition:width .6s ease;}
+.match-fill.high{background:#2E7D52;}.match-fill.mid{background:#E8960A;}.match-fill.low{background:var(--accent);}
+.match-reasons{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px;}
+.match-tag{font-size:11px;font-weight:600;background:var(--primary-light);color:var(--primary);padding:2px 8px;border-radius:99px;}
+.no-profile-hint{font-size:13px;color:var(--text3);padding:10px 0 2px;}
+/* ── 툴 칩 ── */
+.tool-chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:4px;}
+.tool-chip{padding:6px 13px;border-radius:99px;border:1.5px solid var(--border);font-size:13px;font-weight:600;color:var(--text2);background:var(--surface);cursor:pointer;transition:all var(--t);}
+.tool-chip:hover{border-color:var(--primary);color:var(--primary);}
+.tool-chip.on{background:var(--primary);color:#fff;border-color:var(--primary);}
+.profile-field.full{grid-column:1/-1;}
+/* ── 분析하기 탭 ── */
+.analysis-wrap{display:flex;flex-direction:column;gap:20px;}
+.analysis-section{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--rmd);padding:22px;}
+.analysis-section-title{font-size:15px;font-weight:800;color:var(--text);margin-bottom:16px;display:flex;align-items:center;gap:7px;}
+.analysis-opp-list{display:flex;flex-direction:column;gap:8px;}
+.analysis-opp-row{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1.5px solid var(--border);border-radius:var(--r);cursor:pointer;transition:all var(--t);}
+.analysis-opp-row:hover{border-color:var(--primary);background:var(--primary-light);}
+.analysis-opp-row.selected{border-color:var(--primary);background:var(--primary-light);}
+.analysis-opp-check{width:20px;height:20px;border-radius:4px;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all var(--t);}
+.analysis-opp-row.selected .analysis-opp-check{background:var(--primary);border-color:var(--primary);color:#fff;font-size:12px;font-weight:800;}
+.analysis-opp-info{flex:1;min-width:0;}
+.analysis-opp-title{font-size:14px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.analysis-opp-meta{font-size:12px;color:var(--text3);margin-top:2px;}
+.analysis-run-btn{width:100%;padding:14px;background:var(--primary);color:#fff;border-radius:var(--r);font-size:16px;font-weight:700;transition:background var(--t);margin-top:4px;}
+.analysis-run-btn:hover{background:var(--primary-dark);}
+.analysis-run-btn:disabled{opacity:.4;cursor:not-allowed;}
+/* ── 분석 결과 ── */
+.result-back{display:inline-flex;align-items:center;gap:5px;font-size:14px;color:var(--text2);font-weight:600;cursor:pointer;margin-bottom:20px;padding:7px 14px;border:1.5px solid var(--border);border-radius:var(--r);background:var(--surface);transition:all var(--t);}
+.result-back:hover{border-color:var(--primary);color:var(--primary);}
+.result-compare{background:linear-gradient(135deg,#1F5E3C,#2E7D52);border-radius:var(--rmd);padding:20px;margin-bottom:20px;}
+.result-compare-title{font-size:15px;font-weight:800;color:#fff;margin-bottom:14px;}
+.result-card{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--rmd);padding:22px;margin-bottom:16px;}
+.result-card-header{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:18px;}
+.result-card-info{flex:1;}
+.result-card-title{font-size:17px;font-weight:800;color:var(--text);line-height:1.3;margin-bottom:4px;}
+.result-card-co{font-size:13px;color:var(--text3);font-weight:600;}
+.result-score-circle{width:72px;height:72px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;border:3px solid;}
+.result-score-circle.high{border-color:#2E7D52;background:#E8F5EE;color:#2E7D52;}
+.result-score-circle.mid{border-color:#E8960A;background:#FFF8E8;color:#E8960A;}
+.result-score-circle.low{border-color:var(--accent);background:#FFF0F0;color:var(--accent);}
+.result-score-num{font-size:22px;font-weight:800;line-height:1;}
+.result-score-label{font-size:10px;font-weight:700;opacity:.75;}
+.result-bar-wrap{margin-bottom:18px;}
+.result-bar-label{display:flex;justify-content:space-between;font-size:13px;font-weight:700;color:var(--text2);margin-bottom:6px;}
+.result-bar-bg{height:10px;background:var(--border);border-radius:5px;overflow:hidden;}
+.result-bar-fill{height:100%;border-radius:5px;transition:width .8s ease;}
+.result-bar-fill.high{background:#2E7D52;}.result-bar-fill.mid{background:#E8960A;}.result-bar-fill.low{background:var(--accent);}
+.result-table{width:100%;border-collapse:collapse;font-size:14px;}
+.result-table th{text-align:left;font-size:11px;font-weight:700;color:var(--text3);letter-spacing:.06em;padding:0 0 8px;border-bottom:1.5px solid var(--border);}
+.result-table td{padding:10px 0;border-bottom:1px solid var(--border);vertical-align:middle;}
+.result-table tr:last-child td{border-bottom:none;}
+.result-criterion-label{font-weight:600;color:var(--text2);}
+.result-criterion-icon{font-size:16px;text-align:center;}
+.result-criterion-score{font-weight:800;font-size:13px;}
+.result-criterion-score.hit{color:#2E7D52;}.result-criterion-score.miss{color:var(--accent);}
+.result-criterion-reason{color:var(--text2);font-size:13px;}
+.result-summary{padding:14px 16px;border-radius:var(--r);font-size:14px;line-height:1.7;margin-top:14px;}
+.result-summary.high{background:#E8F5EE;color:#1F5E3C;border-left:3px solid #2E7D52;}
+.result-summary.mid{background:#FFF8E8;color:#8A5A00;border-left:3px solid #E8960A;}
+.result-summary.low{background:#FFF0F0;color:#C0392B;border-left:3px solid var(--accent);}
 .my-empty{text-align:center;padding:64px 20px;color:var(--text3)}
 .my-empty-icon{font-size:36px;margin-bottom:12px}
 .my-empty p{font-size:16px;margin-bottom:18px}
@@ -1807,29 +1907,7 @@ const db = window._db;
 function sanitizeForFirestore(projects){ return projects; }
 
 /* 신규 유저에게 보여줄 예시 프로젝트 (id:21 = 안동국제탈춤포스터공모전) */
-const SAMPLE_PROJECTS = {
-  21: {
-    status: 'inprogress',
-    steps: [true, true, false, false, false],
-    checklist: [
-      { id: 'ex1', text: '공모요강 확인 및 규격·제출 형식 정리', done: true },
-      { id: 'ex2', text: '탈춤·탈 이미지 레퍼런스 수집 및 무드보드 작성', done: true },
-      { id: 'ex3', text: '아이디어 스케치 3안 이상 제작', done: false },
-      { id: 'ex4', text: 'Illustrator로 최종 시안 디지털 작업', done: false },
-      { id: 'ex5', text: '출력 사이즈 확인 후 최종 파일 제출', done: false },
-    ],
-    memos: [
-      { id: 'em1', text: '1학년 1학기 기말 과제로 작업했던 탈춤 포스터를 발전시켜서 제출해볼 것. 제출 이메일: kcy1469@kfce.or.kr / 링커리어(linkareer.com)에서 공모요강 확인.', date: '2026. 3. 10.' },
-      { id: 'em2', text: '기존 과제 시안을 공모전 규격에 맞게 다듬는 방향으로. 색·타이포·구도는 기본 유지하되 완성도 높이기. 인쇄 해상도(300dpi)·규격 꼭 확인할 것.', date: '2026. 3. 20.' },
-    ],
-    attachments: [
-      { id: 'ea1', type: 'link', name: '작업 노션 페이지 (시안·메모)', data: 'https://www.notion.so/_2026-3259ac58807380a4a13beb54bfb2eef2?source=copy_link', date: '2026. 3. 10.' },
-    ],
-    portfolioPoints: '전통 탈춤 소재를 현대 그래픽으로 재해석하는 역량 / 수업 과제를 실전 공모전으로 발전시킨 경험 / 인쇄 포스터 규격·해상도 실무 이해',
-    startDate: '2026. 3. 10.',
-    role: '', result: '', learnings: '',
-  },
-};
+const SAMPLE_PROJECTS = {};
 
 function useProjects(userId){
   const [projects, setProjectsState] = useState({});
@@ -2211,20 +2289,22 @@ function Nav({ page, onNav, myCount, userId, onLogout, isAdmin }){
    OPP CARD
 ═══════════════════════════════════════ */
 function OppCard({ opp, project, onSave, onClick }){
-  const st=project?.status;
-  const sv=st==='saved', ip=st==='inprogress', ar=st==='archived';
+  const sv = project?.status==='saved';
   const urg=isUrgent(opp);
   const diff=[1,2,3].map(i=><span key={i} className={`diff-seg ${i<=opp.difficulty?'on':''}`}/>);
   return (
-    <div className={`opp-card ${sv||ip||ar?'is-saved':''}`} onClick={()=>onClick(opp)}>
+    <div className={`opp-card ${sv?'is-saved':''}`}
+      style={sv?{opacity:.45,pointerEvents:'none',filter:'grayscale(0.4)'}:{}}
+      onClick={()=>!sv&&onClick(opp)}>
       <div className="card-top-row">
         <div className="card-top-left">
           <span className={`tag tag-${opp.category}`}>{CAT_LABEL[opp.category]}</span>
           {opp.isNew && <span className="badge-new">NEW</span>}
-          {ip && <span className="badge-progress">진행중</span>}
-          {ar && <span className="badge-archived">완료</span>}
+          {sv && <span className="badge-noportfolio">저장됨</span>}
         </div>
-        <button className={`card-bm ${sv?'saved':''}`} onClick={e=>{e.stopPropagation();onSave(opp.id);}}>
+        <button className={`card-bm ${sv?'saved':''}`}
+          style={sv?{pointerEvents:'auto'}:{}}
+          onClick={e=>{e.stopPropagation();onSave(opp.id);}}>
           {sv?'🔖':'🔗'}
         </button>
       </div>
@@ -2264,8 +2344,11 @@ function ExplorePage({ opps, projects, onSave, onOpenDetail, userGrade }){
     if(next) setTimeout(()=>cardSectionRef.current?.scrollIntoView({behavior:'smooth',block:'start'}),50);
   }
 
+  function scrollToCards(){ setTimeout(()=>cardSectionRef.current?.scrollIntoView({behavior:'smooth',block:'start'}),50); }
+
   function toggleChip(c){
     setChips(prev=>{ const n=new Set(prev); n.has(c)?n.delete(c):n.add(c); return n; });
+    scrollToCards();
   }
   const activeOpps = opps.filter(o=>daysLeft(o.deadline)>=0);
   const filtered = activeOpps.filter(o=>{
@@ -2363,7 +2446,7 @@ function ExplorePage({ opps, projects, onSave, onOpenDetail, userGrade }){
               <div style={{fontSize:'11px',color:'var(--text3)',paddingLeft:'20px',marginTop:'4px'}}>🔗 찾는 공고가 없으면 링커리어·위비티 검색으로 바로 연결해드려요</div>
             </div>
           </div>
-          <select className="filter-select" value={field} onChange={e=>setField(e.target.value)}>
+          <select className="filter-select" value={field} onChange={e=>{ setField(e.target.value); if(e.target.value) scrollToCards(); }}>
             <option value="">모든 분야</option>
             {['브랜딩','UI/UX','그래픽','모션','제품','타이포'].map(f=><option key={f} value={f}>{f}</option>)}
           </select>
@@ -2379,7 +2462,7 @@ function ExplorePage({ opps, projects, onSave, onOpenDetail, userGrade }){
         <div className="grade-filter-row">
           <span className="grade-filter-label">🎓 학년별</span>
           {[{v:0,l:'전체'},{v:1,l:'1학년'},{v:2,l:'2학년'},{v:3,l:'3학년'},{v:4,l:'4학년'}].map(g=>(
-            <div key={g.v} className={`grade-chip ${gradeF===g.v?'on':''}`} onClick={()=>setGradeF(g.v)}>{g.l}</div>
+            <div key={g.v} className={`grade-chip ${gradeF===g.v?'on':''}`} onClick={()=>{ setGradeF(g.v); if(g.v) scrollToCards(); }}>{g.l}</div>
           ))}
         </div>
 
@@ -2531,14 +2614,9 @@ function DetailPage({ opp, project, onBack, onSave, onStart, onOpenProgress, onO
       {/* CTA */}
       <div className="detail-cta">
         <button className="btn-apply" onClick={()=>window.open(opp.link,'_blank')}>공식 사이트에서 지원하기 ↗</button>
-        {!ip && !ar && (
-          <button className={`btn-secondary ${sv?'saved':''}`} onClick={()=>onSave(opp.id)}>
-            {sv?'🔖 저장됨':'🔗 저장하기'}
-          </button>
-        )}
-        {!ip && !ar && <button className="btn-start" onClick={()=>onStart(opp.id)}>🚀 시작하기</button>}
-        {ip  && <button className="btn-start" onClick={()=>onOpenProgress(opp.id)}>📋 진행 관리하기</button>}
-        {ar  && <button className="btn-secondary" onClick={()=>onOpenProgress(opp.id)}>📁 기록 보기</button>}
+        <button className={`btn-secondary ${sv?'saved':''}`} onClick={()=>onSave(opp.id)}>
+          {sv?'🔖 저장됨':'🔗 저장하기'}
+        </button>
       </div>
 
       {/* Similar */}
@@ -2563,12 +2641,99 @@ function DetailPage({ opp, project, onBack, onSave, onStart, onOpenProgress, onO
 /* ═══════════════════════════════════════
    MY PAGE — SAVED TAB
 ═══════════════════════════════════════ */
-function SavedTab({ opps, projects, onOpenDetail, onStart, onUnsave }){
+/* 매칭 점수 계산 */
+function calcMatch(opp, profile){
+  const hasAny = profile.grade||profile.field||profile.category||profile.hasPortfolio||profile.difficulty;
+  if(!hasAny) return null;
+  let score=0, max=0, reasons=[];
+
+  if(profile.grade){
+    max+=25;
+    if(opp.grade&&opp.grade.includes(Number(profile.grade))){
+      score+=25; reasons.push(`${profile.grade}학년 조건 충족`);
+    }
+  }
+  if(profile.field){
+    max+=30;
+    if(opp.field&&opp.field.includes(profile.field)){
+      score+=30; reasons.push(`${profile.field} 분야 일치`);
+    }
+  }
+  if(profile.category){
+    max+=20;
+    if(opp.category===profile.category){
+      score+=20; reasons.push(`${CAT_LABEL[profile.category]} 유형 일치`);
+    }
+  }
+  if(profile.hasPortfolio){
+    max+=15;
+    if(profile.hasPortfolio==='none'&&opp.portfolio==='none'){
+      score+=15; reasons.push('포트폴리오 불필요');
+    } else if(profile.hasPortfolio==='has'){
+      score+=15; reasons.push('포트폴리오 보유');
+    }
+  }
+  if(profile.difficulty){
+    max+=10;
+    if(opp.difficulty===Number(profile.difficulty)){
+      score+=10; reasons.push('난이도 적합');
+    }
+  }
+  const pct = max===0 ? 0 : Math.round((score/max)*100);
+  return { pct, reasons };
+}
+
+function MatchBar({ pct, reasons }){
+  const cls = pct>=70?'high':pct>=40?'mid':'low';
+  return (
+    <div className="match-bar-wrap">
+      <div className="match-bar-header">
+        <span className="match-label">나와의 적합도</span>
+        <span className={`match-pct ${cls}`}>{pct}%</span>
+      </div>
+      <div className="match-bg"><div className={`match-fill ${cls}`} style={{width:`${pct}%`}}/></div>
+      {reasons.length>0 && (
+        <div className="match-reasons">
+          {reasons.map((r,i)=><span key={i} className="match-tag">✓ {r}</span>)}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function RankSection({ saved, profile, onOpenDetail }){
+  if(saved.length<2) return null;
+  const ranked = [...saved]
+    .map(o=>({o, m:calcMatch(o,profile)}))
+    .filter(({m})=>m!==null)
+    .sort((a,b)=>b.m.pct-a.m.pct);
+  if(!ranked.length) return null;
+  return (
+    <div className="rank-section">
+      <div className="rank-title">📊 저장한 공고 적합도 순위</div>
+      {ranked.map(({o,m},i)=>(
+        <div key={o.id} className="rank-row" onClick={()=>onOpenDetail(o)}>
+          <div className={`rank-num ${i===0?'top':''}`}>{i+1}</div>
+          <div className="rank-info">
+            <div className="rank-name">{o.title}</div>
+            <div className="rank-company">{o.company}</div>
+          </div>
+          <div className="rank-bar-wrap">
+            <div className="rank-bar-bg"><div className="rank-bar-fill" style={{width:`${m.pct}%`}}/></div>
+            <div className="rank-pct">{m.pct}%</div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function SavedTab({ opps, projects, onOpenDetail, onUnsave }){
   const saved = opps.filter(o=>projects[o.id]?.status==='saved');
   if(!saved.length) return (
     <div className="my-empty">
-      <div className="my-empty-icon">🔗</div>
-      <p>저장한 공고가 없어요.<br/><span style={{fontSize:'12px',color:'var(--text3)'}}>공고 카드의 아이콘을 눌러 저장해보세요</span></p>
+      <div className="my-empty-icon">🔖</div>
+      <p>저장한 공고가 없어요.<br/><span style={{fontSize:'12px',color:'var(--text3)'}}>공고 카드의 북마크 아이콘을 눌러 저장해보세요</span></p>
     </div>
   );
   return (
@@ -2590,11 +2755,282 @@ function SavedTab({ opps, projects, onOpenDetail, onStart, onUnsave }){
             <button className="unsave-btn" onClick={()=>onUnsave(o.id)} title="저장 취소">✕</button>
           </div>
           <div className="mci-actions">
-            <button className="mci-btn primary" onClick={()=>onStart(o.id)}>🚀 시작하기</button>
-            <button className="mci-btn" onClick={()=>onOpenDetail(o)}>상세 보기</button>
+            <button className="mci-btn primary" onClick={()=>onOpenDetail(o)}>상세 보기</button>
           </div>
         </div>
       ))}
+    </div>
+  );
+}
+
+/* ─ 상세 점수 계산 ─ */
+const TOOLS_LIST = ['Figma','Illustrator','Photoshop','After Effects','Premiere','InDesign','Blender','기타'];
+
+function getOppTools(opp){
+  const all = [...(opp.requiredSkills||[]),...(opp.skills||[])].join(' ');
+  return TOOLS_LIST.filter(t=>all.toLowerCase().includes(t.toLowerCase()));
+}
+function timeLevel(estimatedTime){
+  if(!estimatedTime) return 'any';
+  if(/\d+개월|반년|수개월/.test(estimatedTime)) return 'high';
+  const m=estimatedTime.match(/(\d+)/g);
+  if(m && Math.max(...m.map(Number))>=4) return 'mid';
+  return 'low';
+}
+
+function calcDetail(opp, profile){
+  const rows=[]; let score=0, max=0;
+
+  // 학년
+  if(profile.grade){
+    max+=20; const hit=opp.grade&&opp.grade.includes(Number(profile.grade));
+    score+=hit?20:0;
+    rows.push({label:'학년 조건', icon:hit?'✅':'📌', earned:hit?20:0, maxPts:20,
+      reason: hit ? `${profile.grade}학년 지원 가능` : `지원 연령 폭이 넓어요 — 직접 확인 후 도전해보세요`});
+  }
+  // 관심 분야
+  if(profile.field){
+    max+=20; const hit=opp.field&&opp.field.includes(profile.field);
+    score+=hit?20:0;
+    rows.push({label:'관심 분야', icon:hit?'✅':'📌', earned:hit?20:0, maxPts:20,
+      reason: hit ? `${profile.field} 분야와 일치해요` : `${opp.field} 분야 공고예요 — 새 분야를 경험해볼 기회가 될 수 있어요`});
+  }
+  // 관심 유형
+  if(profile.category){
+    max+=15; const hit=opp.category===profile.category;
+    score+=hit?15:0;
+    rows.push({label:'관심 유형', icon:hit?'✅':'📌', earned:hit?15:0, maxPts:15,
+      reason: hit ? `${CAT_LABEL[profile.category]} 유형 일치` : `${CAT_LABEL[opp.category]} 유형이에요 — 다양한 경험이 될 수 있어요`});
+  }
+  // 포트폴리오
+  if(profile.hasPortfolio){
+    max+=15; const hit=profile.hasPortfolio==='has'||opp.portfolio==='none';
+    score+=hit?15:5;
+    rows.push({label:'포트폴리오', icon:hit?'✅':'📌', earned:hit?15:5, maxPts:15,
+      reason: profile.hasPortfolio==='has' ? '포트폴리오 보유 — 폭넓게 도전 가능해요'
+        : hit ? '포트폴리오 없이도 지원 가능한 공고예요'
+        : '포트폴리오가 있으면 더 유리한 공고예요 — 준비 중이라면 도전해보는 것도 좋아요'});
+  }
+  // 목표
+  if(profile.goal){
+    max+=15;
+    const goalMap={portfolio:['contest','intern','startup'],award:['contest'],work:['intern','startup'],exp:['exp','parttime']};
+    const hit=(goalMap[profile.goal]||[]).includes(opp.category);
+    score+=hit?15:5;
+    const goalLabel={portfolio:'포트폴리오 강화',award:'수상 이력',work:'실무 경험',exp:'다양한 경험'};
+    rows.push({label:'목표 부합', icon:hit?'✅':'📌', earned:hit?15:5, maxPts:15,
+      reason: hit ? `${goalLabel[profile.goal]} 목표와 잘 맞아요`
+        : `주 목표와는 조금 달라요 — 부가적인 경험으로 도전해볼 수 있어요`});
+  }
+  // 툴
+  const userTools=profile.tools||[];
+  if(userTools.length>0){
+    max+=15;
+    const required=getOppTools(opp);
+    if(required.length===0){ score+=15; rows.push({label:'활용 툴', icon:'✅', earned:15, maxPts:15, reason:'특정 툴 제한 없이 자유롭게 작업 가능해요'}); }
+    else {
+      const known=required.filter(t=>userTools.includes(t));
+      const pts=known.length===required.length?15:known.length>0?10:6;
+      score+=pts;
+      rows.push({label:'활용 툴', icon:pts===15?'✅':'📌', earned:pts, maxPts:15,
+        reason: pts===15 ? `보유 툴(${known.join(', ')})로 작업 가능해요`
+          : known.length>0 ? `${known.join(', ')} 보유 — 나머지 툴은 공고를 준비하며 익힐 수 있어요`
+          : `${required[0]} 등을 활용하는 공고예요 — 새 툴을 배울 수 있는 좋은 기회예요`});
+    }
+  }
+  // 가용 시간
+  if(profile.timePerWeek){
+    max+=15;
+    const oppLevel=timeLevel(opp.estimatedTime);
+    const timeOk={low:['low','any'],mid:['low','mid','any'],high:['low','mid','high','any']}[profile.timePerWeek]||[];
+    const hit=timeOk.includes(oppLevel);
+    score+=hit?15:8;
+    const timeLabel={low:'주 5시간 미만',mid:'주 5~15시간',high:'주 15시간 이상'};
+    rows.push({label:'준비 시간', icon:hit?'✅':'📌', earned:hit?15:8, maxPts:15,
+      reason: hit ? `${timeLabel[profile.timePerWeek]}으로 충분히 준비 가능한 공고예요`
+        : `여유 있게 준비하면 좋을 공고예요 (예상 소요: ${opp.estimatedTime||'공고 참고'})`});
+  }
+
+  const pct=max===0?0:Math.round((score/max)*100);
+  return {pct,rows,score,max};
+}
+
+function ResultCard({ opp, detail, rank }){
+  const cls=detail.pct>=70?'high':detail.pct>=40?'mid':'low';
+  const matchedLabels=detail.rows.filter(r=>r.earned===r.maxPts).map(r=>r.label);
+  const summaryText=detail.pct>=70
+    ? `이 공고는 현재 상황과 잘 어울려요! ${matchedLabels.length>0?matchedLabels.join(', ')+' 항목이 딱 맞아요.':''} 한번 도전해보세요.`
+    : detail.pct>=40
+    ? `충분히 도전해볼 만한 공고예요. 일부 항목은 공고를 준비하면서 함께 성장할 수 있어요.`
+    : `현재 조건과 다소 차이가 있지만, 관심 있다면 언제든 도전할 수 있어요. 부담 없이 살펴보세요.`;
+  return (
+    <div className="result-card">
+      <div className="result-card-header">
+        <div className="result-card-info">
+          {rank!=null && <span style={{fontSize:'12px',fontWeight:800,color:'var(--text3)',display:'block',marginBottom:'4px'}}>#{rank+1}위</span>}
+          <div className="result-card-title">{opp.title}</div>
+          <div className="result-card-co">{opp.company}</div>
+        </div>
+        <div className={`result-score-circle ${cls}`}>
+          <div className="result-score-num">{detail.pct}</div>
+          <div className="result-score-label">% 적합</div>
+        </div>
+      </div>
+      <div className="result-bar-wrap">
+        <div className="result-bar-label"><span>적합도</span><span>{detail.score}/{detail.max}점</span></div>
+        <div className="result-bar-bg"><div className={`result-bar-fill ${cls}`} style={{width:`${detail.pct}%`}}/></div>
+      </div>
+      <table className="result-table">
+        <thead><tr>
+          <th style={{width:'28%'}}>항목</th>
+          <th style={{width:'8%',textAlign:'center'}}></th>
+          <th style={{width:'18%'}}>점수</th>
+          <th>참고 내용</th>
+        </tr></thead>
+        <tbody>
+          {detail.rows.map((r,i)=>(
+            <tr key={i}>
+              <td className="result-criterion-label">{r.label}</td>
+              <td className="result-criterion-icon">{r.icon}</td>
+              <td className={`result-criterion-score ${r.earned===r.maxPts?'hit':'miss'}`}>+{r.earned}/{r.maxPts}점</td>
+              <td className="result-criterion-reason">{r.reason}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <div className={`result-summary ${cls}`}>{summaryText}</div>
+    </div>
+  );
+}
+
+function AnalysisTab({ opps, projects, profile, onProfileChange }){
+  const saved=opps.filter(o=>projects[o.id]?.status==='saved');
+  const [selected,setSelected]=useState(new Set());
+  const [results,setResults]=useState(null);
+  const p=profile||{};
+  const hasProfile=p.grade||p.field||p.category||p.goal||p.timePerWeek||(p.tools&&p.tools.length>0);
+  const filledCount=[p.grade,p.field,p.category,p.hasPortfolio,p.goal,p.timePerWeek,(p.tools&&p.tools.length>0)?'y':''].filter(Boolean).length;
+
+  function toggleTool(t){
+    const cur=p.tools||[];
+    onProfileChange('tools',cur.includes(t)?cur.filter(x=>x!==t):[...cur,t]);
+  }
+  function toggleSelect(id){setSelected(prev=>{const n=new Set(prev);n.has(id)?n.delete(id):n.add(id);return n;});}
+  function runAnalysis(){
+    const res=saved.filter(o=>selected.has(o.id))
+      .map(o=>({opp:o,detail:calcDetail(o,p)}))
+      .sort((a,b)=>b.detail.pct-a.detail.pct);
+    setResults(res);
+  }
+
+  if(results) return (
+    <div>
+      <button className="result-back" onClick={()=>setResults(null)}>← 다시 선택</button>
+      {results.length>=2 && (
+        <div className="result-compare">
+          <div className="result-compare-title">📊 적합도 비교 순위</div>
+          {results.map(({opp,detail},i)=>(
+            <div key={opp.id} className="rank-row" style={{marginBottom:i<results.length-1?'8px':0}}>
+              <div className={`rank-num ${i===0?'top':''}`}>{i+1}</div>
+              <div className="rank-info"><div className="rank-name">{opp.title}</div><div className="rank-company">{opp.company}</div></div>
+              <div className="rank-bar-wrap">
+                <div className="rank-bar-bg"><div className="rank-bar-fill" style={{width:`${detail.pct}%`}}/></div>
+                <div className="rank-pct">{detail.pct}%</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+      {results.map(({opp,detail},i)=><ResultCard key={opp.id} opp={opp} detail={detail} rank={results.length>=2?i:null}/>)}
+    </div>
+  );
+
+  return (
+    <div className="analysis-wrap">
+      <div className="analysis-section">
+        <div className="analysis-section-title">① 나에 대해 알려주세요 {filledCount>0&&<span className="match-tag">{filledCount}/7 입력됨</span>}</div>
+        <div className="profile-grid">
+          <div className="profile-field">
+            <label>학년</label>
+            <select value={p.grade||''} onChange={e=>onProfileChange('grade',e.target.value)}>
+              <option value="">선택</option>{[1,2,3,4].map(g=><option key={g} value={g}>{g}학년</option>)}
+            </select>
+          </div>
+          <div className="profile-field">
+            <label>주요 관심 분야</label>
+            <select value={p.field||''} onChange={e=>onProfileChange('field',e.target.value)}>
+              <option value="">선택</option>
+              {['그래픽','UI/UX','브랜딩','타이포','제품','모션'].map(f=><option key={f} value={f}>{f}</option>)}
+            </select>
+          </div>
+          <div className="profile-field">
+            <label>관심 활동 유형</label>
+            <select value={p.category||''} onChange={e=>onProfileChange('category',e.target.value)}>
+              <option value="">선택</option>
+              {[['contest','공모전'],['intern','인턴'],['startup','스타트업'],['exp','체험단'],['parttime','알바']].map(([v,l])=><option key={v} value={v}>{l}</option>)}
+            </select>
+          </div>
+          <div className="profile-field">
+            <label>포트폴리오 여부</label>
+            <select value={p.hasPortfolio||''} onChange={e=>onProfileChange('hasPortfolio',e.target.value)}>
+              <option value="">선택</option>
+              <option value="has">있음</option>
+              <option value="none">없음 (준비 중)</option>
+            </select>
+          </div>
+          <div className="profile-field">
+            <label>이번 활동의 목표</label>
+            <select value={p.goal||''} onChange={e=>onProfileChange('goal',e.target.value)}>
+              <option value="">선택</option>
+              <option value="portfolio">포트폴리오 강화</option>
+              <option value="award">수상 이력 쌓기</option>
+              <option value="work">실무 경험 쌓기</option>
+              <option value="exp">다양한 경험</option>
+            </select>
+          </div>
+          <div className="profile-field">
+            <label>준비에 쏟을 수 있는 시간</label>
+            <select value={p.timePerWeek||''} onChange={e=>onProfileChange('timePerWeek',e.target.value)}>
+              <option value="">선택</option>
+              <option value="low">주 5시간 미만</option>
+              <option value="mid">주 5~15시간</option>
+              <option value="high">주 15시간 이상</option>
+            </select>
+          </div>
+          <div className="profile-field full">
+            <label>현재 쓸 수 있는 툴 (복수 선택 가능)</label>
+            <div className="tool-chips">
+              {TOOLS_LIST.map(t=>(
+                <div key={t} className={`tool-chip ${(p.tools||[]).includes(t)?'on':''}`} onClick={()=>toggleTool(t)}>{t}</div>
+              ))}
+            </div>
+          </div>
+        </div>
+        {filledCount>=5&&<div className="profile-complete">✓ 정보 저장됨 — 분석 준비 완료!</div>}
+      </div>
+
+      <div className="analysis-section">
+        <div className="analysis-section-title">② 분석할 공고를 선택하세요 {selected.size>0&&<span className="match-tag">{selected.size}개 선택</span>}</div>
+        {saved.length===0
+          ? <div style={{color:'var(--text3)',fontSize:'14px'}}>저장한 공고가 없어요. 먼저 탐색하기에서 공고를 북마크해보세요.</div>
+          : <div className="analysis-opp-list">
+              {saved.map(o=>(
+                <div key={o.id} className={`analysis-opp-row ${selected.has(o.id)?'selected':''}`} onClick={()=>toggleSelect(o.id)}>
+                  <div className="analysis-opp-check">{selected.has(o.id)&&'✓'}</div>
+                  <div className="analysis-opp-info">
+                    <div className="analysis-opp-title">{o.title}</div>
+                    <div className="analysis-opp-meta">{o.company} · {o.field} · {CAT_LABEL[o.category]}</div>
+                  </div>
+                  <span className={`tag tag-${o.category}`} style={{flexShrink:0}}>{CAT_LABEL[o.category]}</span>
+                </div>
+              ))}
+            </div>
+        }
+      </div>
+
+      <button className="analysis-run-btn" disabled={selected.size===0||!hasProfile} onClick={runAnalysis}>
+        {!hasProfile?'① 먼저 내 정보를 입력해주세요':selected.size===0?'② 공고를 선택해주세요':`${selected.size}개 공고 적합도 분석하기 →`}
+      </button>
     </div>
   );
 }
@@ -2687,27 +3123,99 @@ function ArchiveTab({ opps, projects, onOpenDetail, onOpenProgress }){
 /* ═══════════════════════════════════════
    MY PAGE
 ═══════════════════════════════════════ */
-function MyPage({ opps, projects, tab, setTab, onOpenDetail, onOpenProgress, onStart, onUnsave }){
-  const savedN    = opps.filter(o=>projects[o.id]?.status==='saved').length;
-  const ipN       = opps.filter(o=>projects[o.id]?.status==='inprogress').length;
-  const arN       = opps.filter(o=>projects[o.id]?.status==='archived').length;
+function ProfileCard({ profile, onChange }){
+  const [open, setOpen] = useState(false);
+  const filled = Object.values(profile).filter(Boolean).length;
+  return (
+    <div className="profile-card">
+      <div className={`profile-card-header ${open?'open':''}`} onClick={()=>setOpen(v=>!v)}>
+        <div className="profile-card-title">
+          🎯 내 프로필
+          {filled>0 && <span className="match-tag">{filled}/5 입력됨</span>}
+        </div>
+        <span className="profile-card-toggle">{open?'▲ 접기':'▼ 펼치기'}</span>
+      </div>
+      {open && (
+        <>
+          <div className="profile-grid">
+            <div className="profile-field">
+              <label>학년</label>
+              <select value={profile.grade} onChange={e=>onChange('grade',e.target.value)}>
+                <option value="">선택</option>
+                {[1,2,3,4].map(g=><option key={g} value={g}>{g}학년</option>)}
+              </select>
+            </div>
+            <div className="profile-field">
+              <label>관심 분야</label>
+              <select value={profile.field} onChange={e=>onChange('field',e.target.value)}>
+                <option value="">선택</option>
+                {['그래픽','UI/UX','브랜딩','타이포','제품','모션'].map(f=><option key={f} value={f}>{f}</option>)}
+              </select>
+            </div>
+            <div className="profile-field">
+              <label>관심 유형</label>
+              <select value={profile.category} onChange={e=>onChange('category',e.target.value)}>
+                <option value="">선택</option>
+                {[['contest','공모전'],['intern','인턴'],['startup','스타트업'],['exp','체험단'],['parttime','알바']].map(([v,l])=><option key={v} value={v}>{l}</option>)}
+              </select>
+            </div>
+            <div className="profile-field">
+              <label>포트폴리오</label>
+              <select value={profile.hasPortfolio} onChange={e=>onChange('hasPortfolio',e.target.value)}>
+                <option value="">선택</option>
+                <option value="has">있음</option>
+                <option value="none">없음</option>
+              </select>
+            </div>
+            <div className="profile-field">
+              <label>선호 난이도</label>
+              <select value={profile.difficulty} onChange={e=>onChange('difficulty',e.target.value)}>
+                <option value="">선택</option>
+                <option value="1">입문 (쉬운 것부터)</option>
+                <option value="2">중간</option>
+                <option value="3">도전적</option>
+              </select>
+            </div>
+          </div>
+          {filled===5 && <div className="profile-complete">✓ 프로필 완성! 저장한 공고에 적합도가 표시됩니다</div>}
+        </>
+      )}
+    </div>
+  );
+}
+
+function MyPage({ opps, projects, onOpenDetail, onUnsave, memo, onMemoChange, profile, onProfileChange }){
+  const savedN = opps.filter(o=>projects[o.id]?.status==='saved').length;
+  const [tab, setTab] = useState('saved');
   return (
     <div>
       <div className="mypage-top">
         <h2>내 공간</h2>
-        <p>저장하고, 실행하고, 기록하고, 포트폴리오로 연결하세요</p>
+        <p>저장한 공고를 모아보고, 나에게 맞는 공고를 분석하세요</p>
         <div className="mypage-tabs">
-          {[['saved','저장한 기회',savedN],['inprogress','진행중',ipN],['archive','완료',arN]].map(([key,label,cnt])=>(
-            <button key={key} className={`mp-tab ${tab===key?'active':''}`} onClick={()=>setTab(key)}>
-              {label} {cnt>0 && <span className="tab-count">{cnt}</span>}
-            </button>
-          ))}
+          <button className={`mp-tab ${tab==='saved'?'active':''}`} onClick={()=>setTab('saved')}>
+            🔖 저장한 공고 {savedN>0&&<span className="tab-count">{savedN}</span>}
+          </button>
+          <button className={`mp-tab ${tab==='analysis'?'active':''}`} onClick={()=>setTab('analysis')}>
+            📊 분석하기
+          </button>
         </div>
       </div>
       <div className="mypage-body">
-        {tab==='saved'      && <SavedTab      opps={opps} projects={projects} onOpenDetail={onOpenDetail} onStart={onStart} onUnsave={onUnsave}/>}
-        {tab==='inprogress' && <InProgressTab opps={opps} projects={projects} onOpenDetail={onOpenDetail} onOpenProgress={onOpenProgress}/>}
-        {tab==='archive'    && <ArchiveTab    opps={opps} projects={projects} onOpenDetail={onOpenDetail} onOpenProgress={onOpenProgress}/>}
+        {tab==='saved' && (
+          <>
+            <div className="memo-pad">
+              <div className="memo-pad-title">📝 메모장</div>
+              <textarea rows={3} value={memo} onChange={e=>onMemoChange(e.target.value)}
+                placeholder="아이디어, 하고 싶은 말, 관심 분야 등 자유롭게 적어두세요..."/>
+              <div className="memo-pad-hint">자동 저장됩니다</div>
+            </div>
+            <SavedTab opps={opps} projects={projects} onOpenDetail={onOpenDetail} onUnsave={onUnsave}/>
+          </>
+        )}
+        {tab==='analysis' && (
+          <AnalysisTab opps={opps} projects={projects} profile={profile} onProfileChange={onProfileChange}/>
+        )}
       </div>
     </div>
   );
@@ -2999,11 +3507,47 @@ function PortfolioView({ opp, project, onBack }){
 function App(){
   const [userId,   setUserId]   = useState(()=>sessionStorage.getItem('oppor-uid')||null);
   const [userGrade, setUserGrade] = useState(()=>Number(sessionStorage.getItem('oppor-grade'))||0);
+
+  /* 메모 + 프로필 로드 */
+  useEffect(()=>{
+    if(!userId){ setUserMemo(''); setUserProfile(EMPTY_PROFILE); return; }
+    db.collection('users').doc(userId).get().then(snap=>{
+      if(snap.exists){
+        if(snap.data().memo) setUserMemo(snap.data().memo);
+        if(snap.data().profile) setUserProfile(snap.data().profile);
+      }
+    }).catch(()=>{});
+  },[userId]);
   const [page,     setPage]     = useState('landing');
   const [exiting,  setExiting]  = useState(false);
   const [detailId, setDetailId] = useState(null);
   const [projId,   setProjId]   = useState(null);
   const [myTab,    setMyTab]    = useState('saved');
+  const [userMemo, setUserMemo] = useState('');
+  const memoTimer = React.useRef(null);
+  function handleMemoChange(val){
+    setUserMemo(val);
+    if(userId){
+      clearTimeout(memoTimer.current);
+      memoTimer.current = setTimeout(()=>{
+        db.collection('users').doc(userId).set({ memo: val }, {merge:true}).catch(()=>{});
+      }, 800);
+    }
+  }
+
+  const EMPTY_PROFILE = { grade:'', field:'', category:'', hasPortfolio:'', difficulty:'' };
+  const [userProfile, setUserProfile] = useState(EMPTY_PROFILE);
+  const profileTimer = React.useRef(null);
+  function handleProfileChange(key, val){
+    const next = {...userProfile, [key]: val};
+    setUserProfile(next);
+    if(userId){
+      clearTimeout(profileTimer.current);
+      profileTimer.current = setTimeout(()=>{
+        db.collection('users').doc(userId).set({ profile: next }, {merge:true}).catch(()=>{});
+      }, 800);
+    }
+  }
   const [prevPage, setPrevPage] = useState('explore');
   const [projects, setProjects] = useProjects(userId);
   const [opps,     setOpps]     = useState(DEFAULT_OPPS);
@@ -3067,7 +3611,7 @@ function App(){
   if(!userId) return <LoginPage onLogin={handleLogin}/>;
 
   // 저장·진행 중 공고 수 합산 → Nav 뱃지
-  const myCount = Object.values(projects).filter(p=>p.status==='saved'||p.status==='inprogress').length;
+  const myCount = Object.values(projects).filter(p=>p.status==='saved').length;
 
   function nav(p){
     if(exiting) return;
@@ -3081,9 +3625,7 @@ function App(){
   /* 저장 토글 */
   function handleSave(id){
     setProjects(prev=>{
-      const cur=prev[id];
-      if(cur && cur.status!=='saved') return prev; // 진행중·완료는 저장 토글 불가
-      if(cur?.status==='saved'){ const n={...prev}; delete n[id]; return n; }
+      if(prev[id]?.status==='saved'){ const n={...prev}; delete n[id]; return n; }
       return {...prev,[id]:{status:'saved'}};
     });
   }
@@ -3147,18 +3689,10 @@ function App(){
             onStart={handleStart} onOpenProgress={openProgress} onOpenDetail={openDetail}/>
         )}
         {page==='mypage' && (
-          <MyPage opps={opps} projects={projects} tab={myTab} setTab={setMyTab}
-            onOpenDetail={openDetail} onOpenProgress={openProgress}
-            onStart={handleStart} onUnsave={unsave}/>
-        )}
-        {page==='project-detail' && (
-          <ProjectDetailPage opp={projOpp} project={projData}
-            onBack={()=>nav('mypage')} onUpdate={updateProject}
-            onArchive={archiveProject}
-            onPortfolio={()=>nav('portfolio')}/>
-        )}
-        {page==='portfolio' && (
-          <PortfolioView opp={projOpp} project={projData} onBack={()=>nav('project-detail')}/>
+          <MyPage opps={opps} projects={projects}
+            onOpenDetail={openDetail} onUnsave={unsave}
+            memo={userMemo} onMemoChange={handleMemoChange}
+            profile={userProfile} onProfileChange={handleProfileChange}/>
         )}
         {page==='admin' && isAdmin && (
           <AdminPage opps={opps} onAdd={handleAddOpp} onDelete={handleDeleteOpp}/>
