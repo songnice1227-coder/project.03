@@ -786,6 +786,34 @@ nav{position:sticky;top:0;z-index:200;height:58px;background:rgba(254,252,249,.9
 .fzone-cnt { display:inline-block; margin-top:6px; background:rgba(120,200,70,.22); border-radius:20px; padding:3px 10px; font-size:12px; color:#b8f06a; font-weight:700; }
 
 /* ── 카드 영역 ── */
+/* ── 신규 등록 섹션 ── */
+.fnew-section{
+  background:linear-gradient(135deg,#1F5E3C,#2E7D52);
+  padding:28px 40px 32px;
+}
+.fnew-header{ display:flex; align-items:center; justify-content:space-between; margin-bottom:18px; }
+.fnew-title{ font-size:20px; font-weight:800; color:#fff; letter-spacing:-.02em; display:flex; align-items:center; gap:8px; }
+.fnew-badge{
+  display:inline-flex; align-items:center; font-size:11px; font-weight:800;
+  background:#FFE76B; color:#1A1A2E; padding:3px 9px; border-radius:99px; letter-spacing:.04em;
+}
+.fnew-sub{ font-size:13px; color:rgba(255,255,255,.65); margin-top:3px; }
+.fnew-scroll{ display:flex; gap:14px; overflow-x:auto; padding-bottom:8px; scroll-snap-type:x mandatory; }
+.fnew-scroll::-webkit-scrollbar{ height:4px; }
+.fnew-scroll::-webkit-scrollbar-track{ background:rgba(255,255,255,.1); border-radius:2px; }
+.fnew-scroll::-webkit-scrollbar-thumb{ background:rgba(255,255,255,.3); border-radius:2px; }
+.fnew-card{
+  flex-shrink:0; width:260px; background:rgba(255,255,255,.97);
+  border-radius:14px; padding:16px; cursor:pointer; scroll-snap-align:start;
+  transition:transform .15s ease, box-shadow .15s ease;
+}
+.fnew-card:hover{ transform:translateY(-3px); box-shadow:0 8px 24px rgba(0,0,0,.18); }
+.fnew-card-top{ display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
+.fnew-card-title{ font-size:15px; font-weight:700; color:var(--text); line-height:1.35; margin-bottom:6px; letter-spacing:-.02em; }
+.fnew-card-co{ font-size:12px; color:var(--text3); font-weight:600; text-transform:uppercase; letter-spacing:.03em; margin-bottom:8px; }
+.fnew-card-desc{ font-size:13px; color:var(--text2); line-height:1.5; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+.fnew-card-footer{ display:flex; align-items:center; gap:6px; margin-top:10px; padding-top:10px; border-top:1px solid var(--border); flex-wrap:wrap; }
+.fnew-empty{ color:rgba(255,255,255,.6); font-size:15px; padding:16px 0; }
 .fcard-section{ background:#edeae3; padding:32px 40px 52px; }
 .fcard-header{ display:flex; align-items:center; gap:10px; margin-bottom:22px; }
 .fcard-title{ font-size:20px; font-weight:800; color:var(--text); letter-spacing:-.02em; }
@@ -2278,8 +2306,46 @@ function ExplorePage({ opps, projects, onSave, onOpenDetail, userGrade }){
   /* 경로 위 소형 앰비언트 점 */
   const AMBIENT = [{cx:200,cy:262},{cx:355,cy:242},{cx:500,cy:252},{cx:650,cy:229},{cx:800,cy:246}];
 
+  const newOpps = opps.filter(o => o.crawledAt).sort((a,b)=>new Date(b.crawledAt)-new Date(a.crawledAt));
+
   return (
     <div className="forest-explore">
+
+      {/* ── 신규 등록 섹션 ── */}
+      <div className="fnew-section">
+        <div className="fnew-header">
+          <div>
+            <div className="fnew-title">
+              ✨ 신규 등록
+              {newOpps.length > 0 && <span className="fnew-badge">NEW {newOpps.length}</span>}
+            </div>
+            <div className="fnew-sub">자동으로 새로 수집된 공고예요</div>
+          </div>
+        </div>
+        {newOpps.length === 0
+          ? <div className="fnew-empty">아직 자동 수집된 신규 공고가 없어요.</div>
+          : <div className="fnew-scroll">
+              {newOpps.map(o => (
+                <div key={o.id} className="fnew-card" onClick={()=>onOpenDetail(o)}>
+                  <div className="fnew-card-top">
+                    <span className={`tag tag-${o.category}`}>{CAT_LABEL[o.category]}</span>
+                    {daysLeft(o.deadline) >= 0 && daysLeft(o.deadline) <= 7
+                      ? <span className="meta-pill urgent">D-{daysLeft(o.deadline)}</span>
+                      : o.deadline ? <span className="meta-pill">~{o.deadline}</span> : null
+                    }
+                  </div>
+                  <div className="fnew-card-co">{o.company}</div>
+                  <div className="fnew-card-title">{o.title}</div>
+                  <div className="fnew-card-desc">{o.shortDesc}</div>
+                  <div className="fnew-card-footer">
+                    <span className="meta-pill">📁 {o.field}</span>
+                    {o.portfolio === 'none' && <span className="badge-noportfolio">포폴불필요</span>}
+                  </div>
+                </div>
+              ))}
+            </div>
+        }
+      </div>
 
       {/* ── 숲 지도 ── */}
       <div className="fmap-wrap">
