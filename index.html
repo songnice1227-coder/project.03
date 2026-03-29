@@ -2643,7 +2643,8 @@ function DetailPage({ opp, project, onBack, onSave, onStart, onOpenProgress, onO
 ═══════════════════════════════════════ */
 /* 매칭 점수 계산 */
 function calcMatch(opp, profile){
-  const hasAny = profile.grade||profile.field||profile.category||profile.hasPortfolio||profile.difficulty;
+  const fieldArr = Array.isArray(profile.field)?profile.field:(profile.field?[profile.field]:[]);
+  const hasAny = profile.grade||fieldArr.length>0||profile.category||profile.hasPortfolio||profile.difficulty;
   if(!hasAny) return null;
   let score=0, max=0, reasons=[];
 
@@ -2653,10 +2654,10 @@ function calcMatch(opp, profile){
       score+=25; reasons.push(`${profile.grade}학년 조건 충족`);
     }
   }
-  if(profile.field){
+  if(fieldArr.length>0){
     max+=30;
-    if(opp.field&&opp.field.includes(profile.field)){
-      score+=30; reasons.push(`${profile.field} 분야 일치`);
+    if(opp.field&&fieldArr.includes(opp.field)){
+      score+=30; reasons.push(`${opp.field} 분야 일치`);
     }
   }
   if(profile.category){
@@ -2789,11 +2790,12 @@ function calcDetail(opp, profile){
       reason: hit ? `${profile.grade}학년 지원 가능` : `지원 연령 폭이 넓어요 — 직접 확인 후 도전해보세요`});
   }
   // 관심 분야
-  if(profile.field){
-    max+=20; const hit=opp.field&&opp.field.includes(profile.field);
+  const _fieldArr = Array.isArray(profile.field)?profile.field:(profile.field?[profile.field]:[]);
+  if(_fieldArr.length>0){
+    max+=20; const hit=opp.field&&_fieldArr.includes(opp.field);
     score+=hit?20:0;
     rows.push({label:'관심 분야', icon:hit?'✅':'📌', earned:hit?20:0, maxPts:20,
-      reason: hit ? `${profile.field} 분야와 일치해요` : `${opp.field} 분야 공고예요 — 새 분야를 경험해볼 기회가 될 수 있어요`});
+      reason: hit ? `${opp.field} 분야와 일치해요` : `${opp.field} 분야 공고예요 — 새 분야를 경험해볼 기회가 될 수 있어요`});
   }
   // 관심 유형
   if(profile.category){
@@ -2908,9 +2910,13 @@ function AnalysisTab({ opps, projects, profile, onProfileChange }){
   const [selected,setSelected]=useState(new Set());
   const [results,setResults]=useState(null);
   const p=profile||{};
-  const hasProfile=p.grade||p.field||p.category||p.goal||p.timePerWeek||(p.tools&&p.tools.length>0);
-  const filledCount=[p.grade,p.field,p.category,p.hasPortfolio,p.goal,p.timePerWeek,(p.tools&&p.tools.length>0)?'y':''].filter(Boolean).length;
+  const pFields=Array.isArray(p.field)?p.field:(p.field?[p.field]:[]);
+  const hasProfile=p.grade||pFields.length>0||p.category||p.goal||p.timePerWeek||(p.tools&&p.tools.length>0);
+  const filledCount=[p.grade,pFields.length>0?'y':'',p.category,p.hasPortfolio,p.goal,p.timePerWeek,(p.tools&&p.tools.length>0)?'y':''].filter(Boolean).length;
 
+  function toggleField(f){
+    onProfileChange('field',pFields.includes(f)?pFields.filter(x=>x!==f):[...pFields,f]);
+  }
   function toggleTool(t){
     const cur=p.tools||[];
     onProfileChange('tools',cur.includes(t)?cur.filter(x=>x!==t):[...cur,t]);
@@ -2956,12 +2962,13 @@ function AnalysisTab({ opps, projects, profile, onProfileChange }){
               <option value="">선택</option>{[1,2,3,4].map(g=><option key={g} value={g}>{g}학년</option>)}
             </select>
           </div>
-          <div className="profile-field">
-            <label>주요 관심 분야</label>
-            <select value={p.field||''} onChange={e=>onProfileChange('field',e.target.value)}>
-              <option value="">선택</option>
-              {['그래픽','UI/UX','브랜딩','타이포','제품','모션'].map(f=><option key={f} value={f}>{f}</option>)}
-            </select>
+          <div className="profile-field full">
+            <label>주요 관심 분야 (복수 선택 가능)</label>
+            <div className="tool-chips">
+              {['그래픽','UI/UX','브랜딩','타이포','제품','모션','기타'].map(f=>(
+                <div key={f} className={`tool-chip ${pFields.includes(f)?'on':''}`} onClick={()=>toggleField(f)}>{f}</div>
+              ))}
+            </div>
           </div>
           <div className="profile-field">
             <label>관심 활동 유형</label>
@@ -3125,7 +3132,11 @@ function ArchiveTab({ opps, projects, onOpenDetail, onOpenProgress }){
 ═══════════════════════════════════════ */
 function ProfileCard({ profile, onChange }){
   const [open, setOpen] = useState(false);
-  const filled = Object.values(profile).filter(Boolean).length;
+  const pcFields=Array.isArray(profile.field)?profile.field:(profile.field?[profile.field]:[]);
+  const filled = Object.entries(profile).filter(([k,v])=>Array.isArray(v)?v.length>0:Boolean(v)).length;
+  function togglePCField(f){
+    onChange('field', pcFields.includes(f)?pcFields.filter(x=>x!==f):[...pcFields,f]);
+  }
   return (
     <div className="profile-card">
       <div className={`profile-card-header ${open?'open':''}`} onClick={()=>setOpen(v=>!v)}>
@@ -3145,12 +3156,13 @@ function ProfileCard({ profile, onChange }){
                 {[1,2,3,4].map(g=><option key={g} value={g}>{g}학년</option>)}
               </select>
             </div>
-            <div className="profile-field">
-              <label>관심 분야</label>
-              <select value={profile.field} onChange={e=>onChange('field',e.target.value)}>
-                <option value="">선택</option>
-                {['그래픽','UI/UX','브랜딩','타이포','제품','모션'].map(f=><option key={f} value={f}>{f}</option>)}
-              </select>
+            <div className="profile-field full">
+              <label>관심 분야 (복수 선택 가능)</label>
+              <div className="tool-chips">
+                {['그래픽','UI/UX','브랜딩','타이포','제품','모션','기타'].map(f=>(
+                  <div key={f} className={`tool-chip ${pcFields.includes(f)?'on':''}`} onClick={()=>togglePCField(f)}>{f}</div>
+                ))}
+              </div>
             </div>
             <div className="profile-field">
               <label>관심 유형</label>
