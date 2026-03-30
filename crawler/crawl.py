@@ -2,6 +2,7 @@
 Oppor 플랫폼 자동 크롤러
 - 위비티(wevity.com) 대학생 디자인 공모전/인턴 공고 수집
 - 콘테스트코리아(contestkorea.com) 디자인 공모전 수집
+- 링커리어(linkareer.com) 대외활동/공모전 수집
 - Claude Haiku API로 정형화
 - Firebase Firestore (config/opps) 자동 업데이트
 """
@@ -21,6 +22,10 @@ from datetime import datetime, date
 
 WEVITY_BASE = "https://www.wevity.com"
 CONTESTKOREA_BASE = "https://www.contestkorea.com"
+LINKAREER_API = "https://api.linkareer.com/graphql"
+LINKAREER_BASE = "https://linkareer.com"
+# 링커리어 persisted query hash (ActivityList_Activities)
+LINKAREER_HASH = "2c08975fee8ab40c8a099c9a78adf8c4a9da63ce605f2cce4e49d4b26c99eba4"
 
 # 위비티 카테고리별 URL (대학생 공모전 / 인턴·대외활동)
 WEVITY_PAGES = [
@@ -150,6 +155,67 @@ def scrape_contestkorea_page(url: str) -> list[dict]:
         results.append({"title": raw_title, "link": full_url})
 
     return results
+
+def scrape_linkareer() -> list[dict]:
+    """링커리어 GraphQL API로 공고 목록 수집"""
+    import urllib.parse
+
+    results = []
+
+    # activityTypeID: 1=대외활동, 2=공모전 — 둘 다 수집
+    for type_id in ["1", "2"]:
+        variables = {
+            "filterBy": {
+                "status": "OPEN",
+                "activityTypeID": type_id,
+                "simpleApplyFilter": None
+            },
+            "pageSize": 30,
+            "page": 1,
+            "activityOrder": {"field": "CREATED_AT", "direction": "DESC"}
+        }
+        extensions = {
+            "persistedQuery": {
+                "version": 1,
+                "sha256Hash": LINKAREER_HASH
+            }
+        }
+        params = {
+            "operationName": "ActivityList_Activities",
+            "variables": json.dumps(variables, ensure_ascii=False),
+            "extensions": json.dumps(extensions, ensure_ascii=False),
+        }
+
+        try:
+            resp = requests.get(
+                LINKAREER_API,
+                params=params,
+                headers={**HEADERS, "Accept": "application/json"},
+                timeout=15
+            )
+            data = resp.json()
+            nodes = data.get("data", {}).get("activities", {}).get("nodes", [])
+        except Exception as e:
+            print(f"  [WARN] 링커리어 API 오류 (type={type_id}): {e}")
+            continue
+
+        for node in nodes:
+            title = node.get("title", "").strip()
+            node_id = node.get("id", "")
+            if not title or not node_id:
+                continue
+            if not is_design_related(title):
+                continue
+            link = f"{LINKAREER_BASE}/activity/{node_id}"
+            if any(r["link"] == link for r in results):
+                continue
+            results.append({"title": title, "link": link})
+
+        time.sleep(2)
+
+    print(f"    → 링커리어 {len(results)}개 공고 발견")
+    return results
+
 
 def scrape_detail_page(url: str) -> str:
     """상세 페이지의 텍스트 전체 반환 (Claude에 넘길 원문)"""
@@ -288,6 +354,11 @@ def main():
         print(f"    → {len(items)}개 공고 발견")
         all_raw.extend(items)
         time.sleep(2)
+
+    # 링커리어
+    print(f"  [링커리어] GraphQL API 크롤링 중...")
+    items = scrape_linkareer()
+    all_raw.extend(items)
 
     # 4. 새 항목만 필터링
     new_raw = [r for r in all_raw if r["link"] not in existing_links]
