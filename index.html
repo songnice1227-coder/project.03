@@ -417,6 +417,20 @@ nav{position:sticky;top:0;z-index:200;height:58px;background:rgba(254,252,249,.9
 /* ── 분석 결과 ── */
 .result-back{display:inline-flex;align-items:center;gap:5px;font-size:14px;color:var(--text2);font-weight:600;cursor:pointer;margin-bottom:20px;padding:7px 14px;border:1.5px solid var(--border);border-radius:var(--r);background:var(--surface);transition:all var(--t);}
 .result-back:hover{border-color:var(--primary);color:var(--primary);}
+.analysis-ai-btn{width:100%;margin-top:8px;padding:13px;background:linear-gradient(90deg,#4F46E5,#7C3AED);color:#fff;border-radius:var(--r);font-size:15px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:6px;transition:opacity var(--t);}
+.analysis-ai-btn:hover{opacity:.88;}
+/* ── 프리미엄 안내 모달 ── */
+.premium-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:500;display:flex;align-items:center;justify-content:center;padding:20px;animation:fadeIn .2s ease;}
+.premium-modal{background:var(--surface);border-radius:20px;padding:32px 28px 28px;max-width:380px;width:100%;box-shadow:0 12px 48px rgba(0,0,0,.18);position:relative;text-align:center;animation:slideUp .25s ease;}
+.premium-modal-icon{font-size:40px;margin-bottom:12px;}
+.premium-modal-badge{display:inline-flex;align-items:center;gap:5px;background:#EEF2FF;color:#4F46E5;font-size:12px;font-weight:800;padding:4px 11px;border-radius:99px;margin-bottom:14px;}
+.premium-modal-title{font-size:20px;font-weight:800;color:var(--text);letter-spacing:-.4px;margin-bottom:8px;}
+.premium-modal-desc{font-size:14px;color:var(--text2);line-height:1.7;margin-bottom:24px;}
+.premium-modal-features{display:flex;flex-direction:column;gap:8px;margin-bottom:24px;text-align:left;}
+.premium-modal-feature{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--text2);}
+.premium-modal-feature span{color:#4F46E5;font-weight:700;}
+.premium-modal-close-btn{width:100%;padding:12px;background:var(--bg);border:1.5px solid var(--border);border-radius:var(--r);font-size:14px;font-weight:700;color:var(--text2);}
+.premium-modal-close-btn:hover{border-color:var(--primary);color:var(--primary);}
 .result-compare{background:linear-gradient(135deg,#1F5E3C,#2E7D52);border-radius:var(--rmd);padding:20px;margin-bottom:20px;}
 .result-compare-title{font-size:15px;font-weight:800;color:#fff;margin-bottom:14px;}
 .result-card{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--rmd);padding:22px;margin-bottom:16px;}
@@ -3212,7 +3226,42 @@ function AnalysisTab({ opps, projects, profile, onProfileChange }){
       <button className="analysis-run-btn" disabled={selected.size===0||!hasProfile} onClick={runAnalysis}>
         {!hasProfile?'① 먼저 내 정보를 입력해주세요':selected.size===0?'② 공고를 선택해주세요':`${selected.size}개 공고 적합도 분석하기 →`}
       </button>
+      <AiAnalysisBtn/>
     </div>
+  );
+}
+
+function AiAnalysisBtn(){
+  const [open, setOpen] = React.useState(false);
+  return (
+    <>
+      <button className="analysis-ai-btn" onClick={()=>setOpen(true)}>
+        ✨ 더 정확한 AI 분석 들으러 가기 →
+      </button>
+      {open && (
+        <div className="premium-modal-overlay" onClick={()=>setOpen(false)}>
+          <div className="premium-modal" onClick={e=>e.stopPropagation()}>
+            <div className="premium-modal-icon">✨</div>
+            <div className="premium-modal-badge">프리미엄 기능</div>
+            <div className="premium-modal-title">AI 맞춤 분석</div>
+            <div className="premium-modal-desc">
+              내 상황을 자유롭게 입력하면,<br/>
+              AI가 공고 전문을 읽고 나에게 맞는지<br/>
+              이유까지 설명해드려요.
+            </div>
+            <div className="premium-modal-features">
+              <div className="premium-modal-feature">✅ <span>자유 텍스트</span>로 내 상황 입력</div>
+              <div className="premium-modal-feature">✅ 공고별 <span>맞춤 추천 이유</span> 제공</div>
+              <div className="premium-modal-feature">✅ <span>"왜 비추천인지"</span>도 명확하게</div>
+            </div>
+            <div style={{background:'#F5F3FF',borderRadius:'8px',padding:'14px',marginBottom:'20px',fontSize:'14px',color:'#4F46E5',fontWeight:700}}>
+              구독 또는 결제 후 이용 가능해요 🙏
+            </div>
+            <button className="premium-modal-close-btn" onClick={()=>setOpen(false)}>닫기</button>
+          </div>
+        </div>
+      )}
+    </>
   );
 }
 
