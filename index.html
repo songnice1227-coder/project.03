@@ -103,6 +103,21 @@ textarea{resize:vertical}
 .nav-logout{font-size:14px;padding:6px 14px;border:1.5px solid var(--border);
   border-radius:var(--r);color:var(--text3);transition:all var(--t)}
 .nav-logout:hover{border-color:var(--accent);color:var(--accent)}
+/* ── 기능 안내 모달 ── */
+.feature-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:500;display:flex;align-items:center;justify-content:center;padding:20px;animation:fadeIn .2s ease;}
+.feature-modal{background:var(--surface);border-radius:20px;padding:32px 28px 24px;max-width:420px;width:100%;box-shadow:0 12px 48px rgba(0,0,0,.18);position:relative;animation:slideUp .25s ease;}
+.feature-modal-badge{display:inline-flex;align-items:center;gap:5px;background:var(--primary-light);color:var(--primary);font-size:12px;font-weight:800;padding:4px 11px;border-radius:99px;margin-bottom:14px;letter-spacing:.02em;}
+.feature-modal-title{font-size:20px;font-weight:800;color:var(--text);letter-spacing:-.4px;margin-bottom:6px;}
+.feature-modal-sub{font-size:14px;color:var(--text2);margin-bottom:22px;line-height:1.6;}
+.feature-modal-list{display:flex;flex-direction:column;gap:10px;margin-bottom:24px;}
+.feature-modal-item{display:flex;align-items:flex-start;gap:12px;background:var(--bg);border:1.5px solid var(--border);border-radius:var(--rmd);padding:13px 15px;}
+.feature-modal-item-icon{font-size:20px;flex-shrink:0;margin-top:1px;}
+.feature-modal-item-body{}
+.feature-modal-item-title{font-size:14px;font-weight:700;color:var(--text);margin-bottom:2px;}
+.feature-modal-item-desc{font-size:13px;color:var(--text2);line-height:1.55;}
+.feature-modal-btn{width:100%;padding:13px;background:var(--primary);color:#fff;border-radius:var(--r);font-size:15px;font-weight:700;transition:background var(--t);}
+.feature-modal-btn:hover{background:var(--primary-dark);}
+.feature-modal-close{position:absolute;top:16px;right:18px;font-size:20px;color:var(--text3);line-height:1;}
 /* ── 마감 임박 배너 ── */
 .deadline-banner{background:#FFF8E8;border-bottom:1.5px solid #FFE0A0;padding:10px 40px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
 .deadline-banner-icon{font-size:16px;flex-shrink:0;}
@@ -2279,6 +2294,50 @@ function LandingPage({ onExplore, onMyPage }){
 /* ═══════════════════════════════════════
    NAV
 ═══════════════════════════════════════ */
+function FeatureModal({ onClose }){
+  return (
+    <div className="feature-modal-overlay" onClick={onClose}>
+      <div className="feature-modal" onClick={e=>e.stopPropagation()}>
+        <button className="feature-modal-close" onClick={onClose}>×</button>
+        <div className="feature-modal-badge">✨ Oppor 주요 기능</div>
+        <div className="feature-modal-title">이런 기능들이 있어요</div>
+        <div className="feature-modal-sub">공모전 탐색부터 마감 알림까지, Oppor가 챙겨드려요.</div>
+        <div className="feature-modal-list">
+          <div className="feature-modal-item">
+            <div className="feature-modal-item-icon">🔄</div>
+            <div className="feature-modal-item-body">
+              <div className="feature-modal-item-title">공고 자동 업데이트</div>
+              <div className="feature-modal-item-desc">매주 월·수·금 오전 9시, 위비티의 디자인 공모전·인턴 공고가 자동으로 수집돼요.</div>
+            </div>
+          </div>
+          <div className="feature-modal-item">
+            <div className="feature-modal-item-icon">⏰</div>
+            <div className="feature-modal-item-body">
+              <div className="feature-modal-item-title">마감 임박 알림</div>
+              <div className="feature-modal-item-desc">저장한 공고 중 7일 이내 마감이 있으면 상단에 알림이 자동으로 표시돼요.</div>
+            </div>
+          </div>
+          <div className="feature-modal-item">
+            <div className="feature-modal-item-icon">📊</div>
+            <div className="feature-modal-item-body">
+              <div className="feature-modal-item-title">적합도 분석</div>
+              <div className="feature-modal-item-desc">내 공간 → 분석하기에서 저장한 공고들의 나에 대한 적합도를 비교해볼 수 있어요.</div>
+            </div>
+          </div>
+          <div className="feature-modal-item">
+            <div className="feature-modal-item-icon">📝</div>
+            <div className="feature-modal-item-body">
+              <div className="feature-modal-item-title">메모 기록</div>
+              <div className="feature-modal-item-desc">내 공간에서 아이디어나 메모를 날짜별로 기록하고 관리할 수 있어요.</div>
+            </div>
+          </div>
+        </div>
+        <button className="feature-modal-btn" onClick={onClose}>시작하기</button>
+      </div>
+    </div>
+  );
+}
+
 function DeadlineBanner({ opps, projects, onOpenDetail }){
   const [closed, setClosed] = React.useState(false);
   if(closed) return null;
@@ -3752,11 +3811,17 @@ function App(){
   function handleAddOpp(opp){ saveOpps([...opps, opp]); }
   function handleDeleteOpp(id){ saveOpps(opps.filter(o=>o.id!==id)); }
 
+  const [showFeatureModal, setShowFeatureModal] = useState(false);
   function handleLogin(id, grade){
     sessionStorage.setItem('oppor-uid', id);
     sessionStorage.setItem('oppor-grade', grade||0);
     setUserId(id);
     setUserGrade(grade||0);
+    // 처음 방문자에게만 모달 표시 (세션당 1회)
+    if(!sessionStorage.getItem('oppor-feature-seen')){
+      setShowFeatureModal(true);
+      sessionStorage.setItem('oppor-feature-seen', '1');
+    }
   }
   function handleLogout(){
     sessionStorage.removeItem('oppor-uid');
@@ -3835,6 +3900,7 @@ function App(){
     <div>
       <Nav page={page} onNav={nav} myCount={myCount} userId={userId} onLogout={handleLogout} isAdmin={isAdmin}/>
       <DeadlineBanner opps={opps} projects={projects} onOpenDetail={openDetail}/>
+      {showFeatureModal && <FeatureModal onClose={()=>setShowFeatureModal(false)}/>}
 
       <div key={page} className={exiting ? 'page-exit' : 'page-enter'}>
         {page==='landing' && (
