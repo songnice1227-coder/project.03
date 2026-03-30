@@ -129,6 +129,14 @@ textarea{resize:vertical}
 .deadline-banner-item:hover{background:#FFF3D0;}
 .deadline-banner-item .dday{color:#E8960A;font-weight:800;}
 .deadline-banner-close{margin-left:auto;font-size:18px;color:#C0A060;padding:0 4px;flex-shrink:0;line-height:1;}
+/* ── 크레딧 안내 배너 ── */
+.credit-banner{background:linear-gradient(90deg,#F0F4FF,#EEF2FF);border-bottom:1.5px solid #C7D2FE;padding:12px 40px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+.credit-banner-icon{font-size:18px;flex-shrink:0;}
+.credit-banner-body{flex:1;min-width:0;}
+.credit-banner-title{font-size:14px;font-weight:800;color:#3730A3;margin-bottom:2px;}
+.credit-banner-desc{font-size:13px;color:#4338CA;line-height:1.55;}
+.credit-banner-count{display:inline-flex;align-items:center;gap:4px;background:#4F46E5;color:#fff;border-radius:99px;padding:2px 10px;font-size:12px;font-weight:800;margin:0 3px;}
+.credit-banner-close{font-size:18px;color:#818CF8;padding:0 4px;flex-shrink:0;line-height:1;}
 
 nav{position:sticky;top:0;z-index:200;height:58px;background:rgba(254,252,249,.92);
   backdrop-filter:blur(12px);border-bottom:1px solid var(--border);
@@ -2344,6 +2352,27 @@ function FeatureModal({ onClose }){
   );
 }
 
+function CreditBanner(){
+  const [closed, setClosed] = React.useState(false);
+  if(closed) return null;
+  const pendingCount = 50; // 크롤링은 됐으나 크레딧 부족으로 미등록된 공고 수
+  return (
+    <div className="credit-banner">
+      <span className="credit-banner-icon">🌱</span>
+      <div className="credit-banner-body">
+        <div className="credit-banner-title">
+          신규 공고 <span className="credit-banner-count">{pendingCount}개</span> 가 대기 중이에요
+        </div>
+        <div className="credit-banner-desc">
+          공고 정보는 이미 수집됐지만, AI 정형화 크레딧이 부족해 아직 표시되지 않고 있어요.<br/>
+          여러분의 성원에 힘입어 크레딧을 충전하게 된다면, 대기 중인 모든 공고를 바로 확인하실 수 있어요 🙏
+        </div>
+      </div>
+      <button className="credit-banner-close" onClick={()=>setClosed(true)}>×</button>
+    </div>
+  );
+}
+
 function DeadlineBanner({ opps, projects, onOpenDetail }){
   const [closed, setClosed] = React.useState(false);
   if(closed) return null;
@@ -3901,6 +3930,7 @@ function App(){
   return (
     <div>
       <Nav page={page} onNav={nav} myCount={myCount} userId={userId} onLogout={handleLogout} isAdmin={isAdmin}/>
+      <CreditBanner/>
       <DeadlineBanner opps={opps} projects={projects} onOpenDetail={openDetail}/>
       {showFeatureModal && <FeatureModal onClose={()=>setShowFeatureModal(false)}/>}
 
