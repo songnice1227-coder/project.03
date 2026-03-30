@@ -1,6 +1,7 @@
 """
 Oppor 플랫폼 자동 크롤러
 - 위비티(wevity.com) 대학생 디자인 공모전/인턴 공고 수집
+- 콘테스트코리아(contestkorea.com) 디자인 공모전 수집
 - Claude Haiku API로 정형화
 - Firebase Firestore (config/opps) 자동 업데이트
 """
@@ -19,6 +20,7 @@ from datetime import datetime, date
 # ── 설정 ──────────────────────────────────────────────────────────────────────
 
 WEVITY_BASE = "https://www.wevity.com"
+CONTESTKOREA_BASE = "https://www.contestkorea.com"
 
 # 위비티 카테고리별 URL (대학생 공모전 / 인턴·대외활동)
 WEVITY_PAGES = [
@@ -26,6 +28,14 @@ WEVITY_PAGES = [
     f"{WEVITY_BASE}/index_university.php?c=find&s=_university&gub=1&cidx=25",
     # 대학생 대외활동·인턴
     f"{WEVITY_BASE}/index_university.php?c=find&s=_university&gub=3&cidx=25",
+]
+
+# 콘테스트코리아 디자인 분야 URL
+CONTESTKOREA_PAGES = [
+    # 디자인 공모전
+    f"{CONTESTKOREA_BASE}/sub/list.php?int_gbn=1&Txt_bcode=031210001",
+    # 광고·마케팅 (브랜딩 등 겹침)
+    f"{CONTESTKOREA_BASE}/sub/list.php?int_gbn=1&Txt_bcode=031210002",
 ]
 
 HEADERS = {
@@ -81,8 +91,8 @@ def get_page_html(url: str) -> str:
         print(f"  [WARN] 페이지 로드 실패: {url} — {e}")
         return ""
 
-def scrape_listing_page(url: str) -> list[dict]:
-    """목록 페이지에서 공고 기본 정보 수집"""
+def scrape_wevity_page(url: str) -> list[dict]:
+    """위비티 목록 페이지에서 공고 기본 정보 수집"""
     html = get_page_html(url)
     if not html:
         return []
@@ -92,28 +102,48 @@ def scrape_listing_page(url: str) -> list[dict]:
 
     for a_tag in soup.find_all("a", href=True):
         href = a_tag["href"]
-        # 상세 페이지 링크 패턴: ix= 파라미터 포함
         if "ix=" not in href:
             continue
 
-        # 절대 URL 변환
         full_url = href if href.startswith("http") else WEVITY_BASE + "/" + href.lstrip("/")
 
         title_el = a_tag.select_one(".tit, h6, .title, strong")
-        if not title_el:
-            # a 태그 텍스트 직접 사용
-            raw_title = a_tag.get_text(" ", strip=True)
-        else:
-            raw_title = title_el.get_text(" ", strip=True)
+        raw_title = title_el.get_text(" ", strip=True) if title_el else a_tag.get_text(" ", strip=True)
 
         if not raw_title or len(raw_title) < 4:
             continue
-
-        # 디자인 관련 공고만 포함
         if not is_design_related(raw_title):
             continue
+        if any(r["link"] == full_url for r in results):
+            continue
 
-        # 같은 링크 중복 제거
+        results.append({"title": raw_title, "link": full_url})
+
+    return results
+
+
+def scrape_contestkorea_page(url: str) -> list[dict]:
+    """콘테스트코리아 목록 페이지에서 공고 기본 정보 수집"""
+    html = get_page_html(url)
+    if not html:
+        return []
+
+    soup = BeautifulSoup(html, "html.parser")
+    results = []
+
+    for a_tag in soup.find_all("a", href=True):
+        href = a_tag["href"]
+        # 상세 페이지 패턴: str_no= 파라미터 포함
+        if "str_no=" not in href:
+            continue
+
+        full_url = href if href.startswith("http") else CONTESTKOREA_BASE + "/sub/" + href.lstrip("/")
+
+        raw_title = a_tag.get_text(" ", strip=True)
+        if not raw_title or len(raw_title) < 4:
+            continue
+        if not is_design_related(raw_title):
+            continue
         if any(r["link"] == full_url for r in results):
             continue
 
@@ -242,12 +272,22 @@ def main():
 
     # 3. 크롤링
     all_raw = []
+
+    # 위비티
     for page_url in WEVITY_PAGES:
-        print(f"  크롤링 중: {page_url}")
-        items = scrape_listing_page(page_url)
+        print(f"  [위비티] 크롤링 중: {page_url}")
+        items = scrape_wevity_page(page_url)
         print(f"    → {len(items)}개 공고 발견")
         all_raw.extend(items)
-        time.sleep(2)  # 서버 부하 방지
+        time.sleep(2)
+
+    # 콘테스트코리아
+    for page_url in CONTESTKOREA_PAGES:
+        print(f"  [콘테스트코리아] 크롤링 중: {page_url}")
+        items = scrape_contestkorea_page(page_url)
+        print(f"    → {len(items)}개 공고 발견")
+        all_raw.extend(items)
+        time.sleep(2)
 
     # 4. 새 항목만 필터링
     new_raw = [r for r in all_raw if r["link"] not in existing_links]
