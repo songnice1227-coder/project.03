@@ -320,8 +320,9 @@ nav{position:sticky;top:0;z-index:200;height:58px;background:rgba(254,252,249,.9
 .rank-row{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:var(--r);background:rgba(255,255,255,.1);margin-bottom:8px;cursor:pointer;transition:background .15s;}
 .rank-row:hover{background:rgba(255,255,255,.18);}
 .rank-row:last-child{margin-bottom:0;}
-.rank-num{width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,.2);color:#fff;font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.rank-num{min-width:26px;height:26px;border-radius:99px;padding:0 7px;background:rgba(255,255,255,.2);color:#fff;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;letter-spacing:-.3px;}
 .rank-num.top{background:#FFE76B;color:#1A1A2E;}
+.rank-num.tied{background:rgba(255,231,107,.25);color:#FFE76B;border:1.5px solid rgba(255,231,107,.5);font-size:11px;letter-spacing:-.4px;}
 .rank-info{flex:1;min-width:0;}
 .rank-name{font-size:14px;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .rank-company{font-size:12px;color:rgba(255,255,255,.65);margin-top:1px;}
@@ -2949,10 +2950,11 @@ function AnalysisTab({ opps, projects, profile, onProfileChange }){
             return results.map(({opp,detail},i)=>{
               const r=ranks[i];
               const isTop=r===1;
-              const label=topCount>1&&isTop?`공동 ${r}위`:isTop?`${r}위`:`${r}위`;
+              const isTied=topCount>1&&isTop;
+              const label=isTied?`🤝 공동 ${r}위`:`${r}위`;
               return (
                 <div key={opp.id} className="rank-row" style={{marginBottom:i<results.length-1?'8px':0}}>
-                  <div className={`rank-num ${isTop?'top':''}`}>{label}</div>
+                  <div className={`rank-num ${isTop&&!isTied?'top':''} ${isTied?'tied':''}`}>{label}</div>
                   <div className="rank-info"><div className="rank-name">{opp.title}</div><div className="rank-company">{opp.company}</div></div>
                   <div className="rank-bar-wrap">
                     <div className="rank-bar-bg"><div className="rank-bar-fill" style={{width:`${detail.pct}%`}}/></div>
