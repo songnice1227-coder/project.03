@@ -3819,11 +3819,7 @@ function App(){
     sessionStorage.setItem('oppor-grade', grade||0);
     setUserId(id);
     setUserGrade(grade||0);
-    // 처음 방문자에게만 모달 표시 (세션당 1회)
-    if(!sessionStorage.getItem('oppor-feature-seen')){
-      setShowFeatureModal(true);
-      sessionStorage.setItem('oppor-feature-seen', '1');
-    }
+    setShowFeatureModal(true);
   }
   function handleLogout(){
     sessionStorage.removeItem('oppor-uid');
