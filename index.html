@@ -104,6 +104,8 @@ textarea{resize:vertical}
   border-radius:var(--r);color:var(--text3);transition:all var(--t)}
 .nav-logout:hover{border-color:var(--accent);color:var(--accent)}
 /* ── 기능 안내 모달 ── */
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes slideUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
 .feature-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:500;display:flex;align-items:center;justify-content:center;padding:20px;animation:fadeIn .2s ease;}
 .feature-modal{background:var(--surface);border-radius:20px;padding:32px 28px 24px;max-width:420px;width:100%;box-shadow:0 12px 48px rgba(0,0,0,.18);position:relative;animation:slideUp .25s ease;}
 .feature-modal-badge{display:inline-flex;align-items:center;gap:5px;background:var(--primary-light);color:var(--primary);font-size:12px;font-weight:800;padding:4px 11px;border-radius:99px;margin-bottom:14px;letter-spacing:.02em;}
