@@ -171,10 +171,10 @@ nav{position:sticky;top:0;z-index:200;height:58px;background:rgba(254,252,249,.9
   transition:all var(--t);flex-shrink:0}
 .card-bm:hover{border-color:var(--primary);background:var(--primary-light)}
 .card-bm.saved{border-color:var(--primary);background:var(--primary);color:#fff}
-.card-company-row{display:flex;align-items:center;gap:5px;flex-wrap:wrap;margin-bottom:5px}
+.card-company-row{display:flex;align-items:center;gap:5px;flex-wrap:wrap;margin-bottom:4px}
 .card-company{font-size:13px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.03em}
-.card-title{font-size:17px;font-weight:700;line-height:1.35;letter-spacing:-.02em;margin-bottom:7px}
-.card-desc{font-size:14px;color:var(--text2);line-height:1.55;margin-bottom:14px;flex:1}
+.card-title{font-size:17px;font-weight:700;line-height:1.35;letter-spacing:-.02em;margin-bottom:10px}
+.card-desc{font-size:14px;color:var(--text2);line-height:1.6;margin-bottom:14px;flex:1}
 .card-divider{height:1px;background:var(--border);margin-bottom:12px}
 .card-meta-row{display:flex;flex-wrap:wrap;gap:5px;align-items:center}
 .meta-pill{display:inline-flex;align-items:center;gap:3px;font-size:13px;color:var(--text2);
@@ -299,10 +299,26 @@ nav{position:sticky;top:0;z-index:200;height:58px;background:rgba(254,252,249,.9
 .mypage-body{padding:24px 40px 60px;background:linear-gradient(180deg,#D8EACF 0%,#E4F0DC 100%);min-height:60vh}
 /* ── 메모장 ── */
 .memo-pad{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--rmd);padding:20px;margin-bottom:28px;}
-.memo-pad-title{font-size:15px;font-weight:700;color:var(--text);margin-bottom:12px;display:flex;align-items:center;gap:6px;}
-.memo-pad textarea{width:100%;border:1.5px solid var(--border);border-radius:var(--r);padding:12px 14px;font-size:14px;color:var(--text);background:var(--bg);outline:none;line-height:1.7;transition:border-color var(--t);}
-.memo-pad textarea:focus{border-color:var(--primary);}
-.memo-pad-hint{font-size:12px;color:var(--text3);margin-top:6px;}
+.memo-pad-title{font-size:15px;font-weight:700;color:var(--text);margin-bottom:14px;display:flex;align-items:center;gap:6px;}
+.memo-list{display:flex;flex-direction:column;gap:10px;margin-bottom:14px;}
+.memo-item{background:var(--bg);border:1.5px solid var(--border);border-radius:var(--r);padding:12px 14px;}
+.memo-item-date{font-size:11px;font-weight:700;color:var(--text3);margin-bottom:5px;letter-spacing:.03em;}
+.memo-item-text{font-size:14px;color:var(--text);line-height:1.7;white-space:pre-wrap;word-break:break-all;}
+.memo-item-actions{float:right;display:flex;gap:4px;}
+.memo-item-del,.memo-item-edit{font-size:12px;color:var(--text3);padding:2px 6px;border-radius:4px;transition:color var(--t);}
+.memo-item-del:hover{color:var(--accent);}
+.memo-item-edit:hover{color:var(--primary);}
+.memo-item-editing textarea{width:100%;border:1.5px solid var(--primary);border-radius:var(--r);padding:10px 12px;font-size:14px;color:var(--text);background:var(--bg);outline:none;line-height:1.7;resize:none;margin-top:6px;}
+.memo-item-edit-actions{display:flex;gap:6px;justify-content:flex-end;margin-top:6px;}
+.memo-edit-save{padding:5px 14px;background:var(--primary);color:#fff;border-radius:var(--r);font-size:13px;font-weight:700;}
+.memo-edit-cancel{padding:5px 14px;background:var(--bg);border:1.5px solid var(--border);border-radius:var(--r);font-size:13px;font-weight:700;color:var(--text2);}
+.memo-input-wrap{display:flex;flex-direction:column;gap:8px;}
+.memo-input-wrap textarea{width:100%;border:1.5px solid var(--border);border-radius:var(--r);padding:12px 14px;font-size:14px;color:var(--text);background:var(--bg);outline:none;line-height:1.7;transition:border-color var(--t);resize:none;}
+.memo-input-wrap textarea:focus{border-color:var(--primary);}
+.memo-submit{align-self:flex-end;padding:8px 20px;background:var(--primary);color:#fff;border-radius:var(--r);font-size:14px;font-weight:700;transition:background var(--t);}
+.memo-submit:hover{background:var(--primary-dark);}
+.memo-submit:disabled{opacity:.45;cursor:not-allowed;}
+.memo-empty{font-size:13px;color:var(--text3);padding:8px 0;}
 /* ── 프로필 카드 ── */
 .profile-card{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--rmd);padding:20px;margin-bottom:20px;}
 .profile-card-header{display:flex;align-items:center;justify-content:space-between;cursor:pointer;margin-bottom:0;}
@@ -3218,7 +3234,71 @@ function ProfileCard({ profile, onChange }){
   );
 }
 
-function MyPage({ opps, projects, onOpenDetail, onUnsave, memo, onMemoChange, profile, onProfileChange }){
+function MemoPad({ memos, onAdd, onDelete, onEdit }){
+  const [text, setText] = useState('');
+  const [editIdx, setEditIdx] = useState(null);
+  const [editText, setEditText] = useState('');
+  function fmt(iso){
+    const d=new Date(iso);
+    return `${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')}  ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+  }
+  function submit(){
+    if(!text.trim()) return;
+    onAdd(text.trim());
+    setText('');
+  }
+  function startEdit(i){
+    setEditIdx(i);
+    setEditText(memos[i].text);
+  }
+  function saveEdit(){
+    if(!editText.trim()) return;
+    onEdit(editIdx, editText.trim());
+    setEditIdx(null);
+  }
+  function cancelEdit(){ setEditIdx(null); }
+  return (
+    <div className="memo-pad">
+      <div className="memo-pad-title">📝 메모</div>
+      {memos.length>0
+        ? <div className="memo-list">
+            {memos.map((m,i)=>(
+              <div key={i} className="memo-item">
+                <div className="memo-item-date">
+                  {fmt(m.createdAt)}{m.editedAt&&<span style={{color:'var(--text3)',marginLeft:6,fontSize:11}}>(수정됨)</span>}
+                  <span className="memo-item-actions">
+                    <button className="memo-item-edit" onClick={()=>startEdit(i)}>수정</button>
+                    <button className="memo-item-del" onClick={()=>onDelete(i)}>삭제</button>
+                  </span>
+                </div>
+                {editIdx===i
+                  ? <div className="memo-item-editing">
+                      <textarea rows={3} value={editText} onChange={e=>setEditText(e.target.value)}
+                        onKeyDown={e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();saveEdit();}
+                          else if(e.key==='Escape') cancelEdit();}}/>
+                      <div className="memo-item-edit-actions">
+                        <button className="memo-edit-cancel" onClick={cancelEdit}>취소</button>
+                        <button className="memo-edit-save" onClick={saveEdit}>저장</button>
+                      </div>
+                    </div>
+                  : <div className="memo-item-text">{m.text}</div>
+                }
+              </div>
+            ))}
+          </div>
+        : <div className="memo-empty">아직 작성한 메모가 없어요.</div>
+      }
+      <div className="memo-input-wrap">
+        <textarea rows={3} value={text} onChange={e=>setText(e.target.value)}
+          placeholder="아이디어, 하고 싶은 말, 관심 분야 등 자유롭게 적어두세요..."
+          onKeyDown={e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();submit();}}}/>
+        <button className="memo-submit" onClick={submit} disabled={!text.trim()}>등록</button>
+      </div>
+    </div>
+  );
+}
+
+function MyPage({ opps, projects, onOpenDetail, onUnsave, memos, onMemoAdd, onMemoDelete, onMemoEdit, profile, onProfileChange }){
   const savedN = opps.filter(o=>projects[o.id]?.status==='saved').length;
   const [tab, setTab] = useState('saved');
   return (
@@ -3238,12 +3318,7 @@ function MyPage({ opps, projects, onOpenDetail, onUnsave, memo, onMemoChange, pr
       <div className="mypage-body">
         {tab==='saved' && (
           <>
-            <div className="memo-pad">
-              <div className="memo-pad-title">📝 메모장</div>
-              <textarea rows={3} value={memo} onChange={e=>onMemoChange(e.target.value)}
-                placeholder="아이디어, 하고 싶은 말, 관심 분야 등 자유롭게 적어두세요..."/>
-              <div className="memo-pad-hint">자동 저장됩니다</div>
-            </div>
+            <MemoPad memos={memos} onAdd={onMemoAdd} onDelete={onMemoDelete} onEdit={onMemoEdit}/>
             <SavedTab opps={opps} projects={projects} onOpenDetail={onOpenDetail} onUnsave={onUnsave}/>
           </>
         )}
@@ -3547,8 +3622,10 @@ function App(){
     if(!userId){ setUserMemo(''); setUserProfile(EMPTY_PROFILE); return; }
     db.collection('users').doc(userId).get().then(snap=>{
       if(snap.exists){
-        if(snap.data().memo) setUserMemo(snap.data().memo);
-        if(snap.data().profile) setUserProfile(snap.data().profile);
+        const d=snap.data();
+        if(d.memos) setUserMemos(d.memos);
+        else if(d.memo) setUserMemos([{text:d.memo, createdAt:new Date().toISOString()}]); // 구버전 호환
+        if(d.profile) setUserProfile(d.profile);
       }
     }).catch(()=>{});
   },[userId]);
@@ -3557,16 +3634,22 @@ function App(){
   const [detailId, setDetailId] = useState(null);
   const [projId,   setProjId]   = useState(null);
   const [myTab,    setMyTab]    = useState('saved');
-  const [userMemo, setUserMemo] = useState('');
-  const memoTimer = React.useRef(null);
-  function handleMemoChange(val){
-    setUserMemo(val);
-    if(userId){
-      clearTimeout(memoTimer.current);
-      memoTimer.current = setTimeout(()=>{
-        db.collection('users').doc(userId).set({ memo: val }, {merge:true}).catch(()=>{});
-      }, 800);
-    }
+  const [userMemos, setUserMemos] = useState([]);
+  function handleMemoAdd(text){
+    const entry = { text, createdAt: new Date().toISOString() };
+    const next = [entry, ...userMemos];
+    setUserMemos(next);
+    if(userId) db.collection('users').doc(userId).set({ memos: next }, {merge:true}).catch(()=>{});
+  }
+  function handleMemoDelete(idx){
+    const next = userMemos.filter((_,i)=>i!==idx);
+    setUserMemos(next);
+    if(userId) db.collection('users').doc(userId).set({ memos: next }, {merge:true}).catch(()=>{});
+  }
+  function handleMemoEdit(idx, text){
+    const next = userMemos.map((m,i)=>i===idx?{...m, text, editedAt: new Date().toISOString()}:m);
+    setUserMemos(next);
+    if(userId) db.collection('users').doc(userId).set({ memos: next }, {merge:true}).catch(()=>{});
   }
 
   const EMPTY_PROFILE = { grade:'', field:'', category:'', hasPortfolio:'', difficulty:'' };
@@ -3725,7 +3808,7 @@ function App(){
         {page==='mypage' && (
           <MyPage opps={opps} projects={projects}
             onOpenDetail={openDetail} onUnsave={unsave}
-            memo={userMemo} onMemoChange={handleMemoChange}
+            memos={userMemos} onMemoAdd={handleMemoAdd} onMemoDelete={handleMemoDelete} onMemoEdit={handleMemoEdit}
             profile={userProfile} onProfileChange={handleProfileChange}/>
         )}
         {page==='admin' && isAdmin && (
