@@ -2870,6 +2870,7 @@ function ResultCard({ opp, detail, rank }){
       <div className="result-card-header">
         <div className="result-card-info">
           {rank!=null && <span style={{fontSize:'12px',fontWeight:800,color:'var(--text3)',display:'block',marginBottom:'4px'}}>#{rank+1}위</span>}
+
           <div className="result-card-title">{opp.title}</div>
           <div className="result-card-co">{opp.company}</div>
         </div>
@@ -2935,19 +2936,38 @@ function AnalysisTab({ opps, projects, profile, onProfileChange }){
       {results.length>=2 && (
         <div className="result-compare">
           <div className="result-compare-title">📊 적합도 비교 순위</div>
-          {results.map(({opp,detail},i)=>(
-            <div key={opp.id} className="rank-row" style={{marginBottom:i<results.length-1?'8px':0}}>
-              <div className={`rank-num ${i===0?'top':''}`}>{i+1}</div>
-              <div className="rank-info"><div className="rank-name">{opp.title}</div><div className="rank-company">{opp.company}</div></div>
-              <div className="rank-bar-wrap">
-                <div className="rank-bar-bg"><div className="rank-bar-fill" style={{width:`${detail.pct}%`}}/></div>
-                <div className="rank-pct">{detail.pct}%</div>
-              </div>
-            </div>
-          ))}
+          {(()=>{
+            // 동점 순위 계산
+            const rankOf=results.map(({detail},i)=>{
+              const higher=results.filter((_,j)=>j<i&&results[j].detail.pct>detail.pct).length;
+              return higher===0?1:results.slice(0,i).filter(r=>r.detail.pct>detail.pct).length+1;
+            });
+            // 실제 순위: 나보다 높은 점수가 몇 명인지 + 1
+            const ranks=results.map(({detail})=>results.filter(r=>r.detail.pct>detail.pct).length+1);
+            const topRank=Math.min(...ranks);
+            const topCount=ranks.filter(r=>r===topRank).length;
+            return results.map(({opp,detail},i)=>{
+              const r=ranks[i];
+              const isTop=r===1;
+              const label=topCount>1&&isTop?`공동 ${r}위`:isTop?`${r}위`:`${r}위`;
+              return (
+                <div key={opp.id} className="rank-row" style={{marginBottom:i<results.length-1?'8px':0}}>
+                  <div className={`rank-num ${isTop?'top':''}`}>{label}</div>
+                  <div className="rank-info"><div className="rank-name">{opp.title}</div><div className="rank-company">{opp.company}</div></div>
+                  <div className="rank-bar-wrap">
+                    <div className="rank-bar-bg"><div className="rank-bar-fill" style={{width:`${detail.pct}%`}}/></div>
+                    <div className="rank-pct">{detail.pct}%</div>
+                  </div>
+                </div>
+              );
+            });
+          })()}
         </div>
       )}
-      {results.map(({opp,detail},i)=><ResultCard key={opp.id} opp={opp} detail={detail} rank={results.length>=2?i:null}/>)}
+      {(()=>{
+        const ranks=results.map(({detail})=>results.filter(r=>r.detail.pct>detail.pct).length+1);
+        return results.map(({opp,detail},i)=><ResultCard key={opp.id} opp={opp} detail={detail} rank={results.length>=2?ranks[i]-1:null}/>);
+      })()}
     </div>
   );
 
