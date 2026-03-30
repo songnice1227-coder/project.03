@@ -3722,7 +3722,7 @@ function App(){
 
   /* 메모 + 프로필 로드 */
   useEffect(()=>{
-    if(!userId){ setUserMemo(''); setUserProfile(EMPTY_PROFILE); return; }
+    if(!userId){ setUserMemos([]); setUserProfile(EMPTY_PROFILE); return; }
     db.collection('users').doc(userId).get().then(snap=>{
       if(snap.exists){
         const d=snap.data();
