@@ -103,6 +103,15 @@ textarea{resize:vertical}
 .nav-logout{font-size:14px;padding:6px 14px;border:1.5px solid var(--border);
   border-radius:var(--r);color:var(--text3);transition:all var(--t)}
 .nav-logout:hover{border-color:var(--accent);color:var(--accent)}
+/* ── 마감 임박 배너 ── */
+.deadline-banner{background:#FFF8E8;border-bottom:1.5px solid #FFE0A0;padding:10px 40px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.deadline-banner-icon{font-size:16px;flex-shrink:0;}
+.deadline-banner-text{font-size:14px;font-weight:600;color:#A0600A;flex:1;}
+.deadline-banner-items{display:flex;flex-wrap:wrap;gap:6px;}
+.deadline-banner-item{display:inline-flex;align-items:center;gap:5px;background:#fff;border:1.5px solid #FFD580;border-radius:99px;padding:4px 12px;font-size:13px;font-weight:600;color:#7A4A00;cursor:pointer;transition:background var(--t);}
+.deadline-banner-item:hover{background:#FFF3D0;}
+.deadline-banner-item .dday{color:#E8960A;font-weight:800;}
+.deadline-banner-close{margin-left:auto;font-size:18px;color:#C0A060;padding:0 4px;flex-shrink:0;line-height:1;}
 
 nav{position:sticky;top:0;z-index:200;height:58px;background:rgba(254,252,249,.92);
   backdrop-filter:blur(12px);border-bottom:1px solid var(--border);
@@ -2270,6 +2279,39 @@ function LandingPage({ onExplore, onMyPage }){
 /* ═══════════════════════════════════════
    NAV
 ═══════════════════════════════════════ */
+function DeadlineBanner({ opps, projects, onOpenDetail }){
+  const [closed, setClosed] = React.useState(false);
+  if(closed) return null;
+
+  const today = new Date(); today.setHours(0,0,0,0);
+  const urgent = opps
+    .filter(o => projects[o.id]?.status==='saved' && o.deadline)
+    .map(o => {
+      const diff = Math.ceil((new Date(o.deadline) - today) / 86400000);
+      return { ...o, diff };
+    })
+    .filter(o => o.diff >= 0 && o.diff <= 7)
+    .sort((a,b) => a.diff - b.diff);
+
+  if(urgent.length === 0) return null;
+
+  return (
+    <div className="deadline-banner">
+      <span className="deadline-banner-icon">⏰</span>
+      <span className="deadline-banner-text">저장한 공고 마감 임박!</span>
+      <div className="deadline-banner-items">
+        {urgent.map(o => (
+          <button key={o.id} className="deadline-banner-item" onClick={()=>onOpenDetail(o)}>
+            {o.title.length>16 ? o.title.slice(0,16)+'…' : o.title}
+            <span className="dday">{o.diff===0 ? 'D-day' : `D-${o.diff}`}</span>
+          </button>
+        ))}
+      </div>
+      <button className="deadline-banner-close" onClick={()=>setClosed(true)}>×</button>
+    </div>
+  );
+}
+
 function Nav({ page, onNav, myCount, userId, onLogout, isAdmin }){
   const isMyActive = ['mypage','project-detail','portfolio'].includes(page);
   return (
@@ -3792,6 +3834,7 @@ function App(){
   return (
     <div>
       <Nav page={page} onNav={nav} myCount={myCount} userId={userId} onLogout={handleLogout} isAdmin={isAdmin}/>
+      <DeadlineBanner opps={opps} projects={projects} onOpenDetail={openDetail}/>
 
       <div key={page} className={exiting ? 'page-exit' : 'page-enter'}>
         {page==='landing' && (
